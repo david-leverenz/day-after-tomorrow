@@ -78,7 +78,7 @@ var searchedCities = document.querySelector("#searched-cities");
 
 var getLatLonCity = function (city, country) {
 
-    var apiURL = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "," + country+"&limit=1&appid=44be570f60fd1ef1f012456a39e5a0ff";
+    var apiURL = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "," + country + "&limit=1&appid=44be570f60fd1ef1f012456a39e5a0ff";
 
     fetch(apiURL).then(function (response) {
 
@@ -107,7 +107,7 @@ function getInput() {
     var cityName = prompt("Enter a city name");
 
     var countryName = prompt("Enter a country name");
-    
+
     getLatLonCity(cityName, countryName);
 }
 
@@ -140,7 +140,7 @@ var getForecast = function (latitude, longitude) {
 
             var dayChosen = determineArrayPosition();
 
-            console.log(dayChosen);
+            // console.log(dayChosen);
 
             // rowDivEl.innerHTML = "";
 
@@ -161,11 +161,10 @@ var getForecast = function (latitude, longitude) {
             var sunriseArray = dayjs.unix(foreSunrise);
             var sunsetArray = dayjs.unix(foreSunset);
 
-            var timezoneFormatted =" (UTC " + foreTimezone / 3600 + " hours)";
-            // console.log(foreCity);
+            var timezoneFormatted = " (UTC " + foreTimezone / 3600 + " hours)";
 
-            // console.log(sunriseArray);
-            // console.log(sunsetArray);
+            console.log(sunriseArray);
+            console.log(sunsetArray);
 
             if (sunriseArray.$H < 12) {
                 var riseAmpm = "a.m."
@@ -181,13 +180,18 @@ var getForecast = function (latitude, longitude) {
                 var setAmpm = "p.m.";
             }
 
+            // Problem: if the minutes part of the sunrise or sunset time ends in 0, the dayjs displays a single number so "5:30 a.m." appears as "5:3 a.m."
+
+            console.log(sunriseArray.$m);
+            console.log(sunriseArray.$m.length);
+
             // console.log(sunsetArray.$H+":"+sunsetArray.$m+" "+setAmpm);
             var sunrise12Format = sunriseArray.$H + ":" + sunriseArray.$m + " " + riseAmpm
             var sunset12Format = twelveHour + ":" + sunsetArray.$m + " " + setAmpm
 
             rainProbability = foreRain * 100;
 
-            var weatherStuff = "Day: " + foreDay + "\n" + "City: " +foreCity +"\n"+ "Country: " + foreCountry + "\n"  + "Timezone: " + timezoneFormatted +"\n"+ "Weather icon:  " + foreIcon + "\n" + "Temp: " + foreTemp + "\n" + "Feels like: " + foreFeels + "\n" + "Wind: " + foreWind + "\n" + "Humidity: " + foreHumidity + "\n" + "Cloudiness:" + foreClouds + "%, " + "\n" + "Rain probability: " + rainProbability + "%" +  "\n" + "Sunrise: " + sunrise12Format + "\n" + "Sunset: " + sunset12Format;
+            var weatherStuff = "Day: " + foreDay + "\n" + "City: " + foreCity + "\n" + "Country: " + foreCountry + "\n" + "Timezone: " + timezoneFormatted + "\n" + "Weather icon:  " + foreIcon + "\n" + "Temp: " + foreTemp + "\n" + "Feels like: " + foreFeels + "\n" + "Wind: " + foreWind + "\n" + "Humidity: " + foreHumidity + "\n" + "Cloudiness:" + foreClouds + "%, " + "\n" + "Rain probability: " + rainProbability + "%" + "\n" + "Sunrise: " + sunrise12Format + "\n" + "Sunset: " + sunset12Format;
 
             console.log(weatherStuff);
 
