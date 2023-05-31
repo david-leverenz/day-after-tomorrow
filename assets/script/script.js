@@ -159,19 +159,20 @@ var getForecast = function (latitude, longitude) {
                 var foreHumidity = forecastData.list[dayChosen].main.humidity;
                 var foreClouds =forecastData.list[dayChosen].clouds.all;
                 var foreRain =forecastData.list[dayChosen].pop;
-                var foreRain3 = forecastData.list[dayChosen].rain;
-                var foreSnow3 = forecastData.list[dayChosen].snow;
                 var foreCountry = forecastData.city.country;
                 var foreTimezone = forecastData.city.timezone;
                 var foreSunrise = forecastData.city.sunrise;
                 var foreSunset = forecastData.city.sunset;
 
-                console.log(foreCountry);
+                var sunriseArray= dayjs.unix(foreSunrise);
+
+                console.log(sunriseArray);
+
+                console.log(sunriseArray.$H);
 
                 rainProbability = foreRain*100;
 
-
-                console.log("Day: " + foreDay + ", Icon: " +foreIcon+ ", Temp: " + foreTemp + ", Feels like: "+ foreFeels +", Wind: " +foreWind+ ", Humidity: " + foreHumidity + ", Cloudiness:" + foreClouds + "%, Rain probability: "+ rainProbability +"%"  + ", Rain in the last 3 hours: "+ foreRain3 + ", Snow in the last 3 hours: "+ foreSnow3 + ", Country: "+ foreCountry + ", Timezone: "+ foreTimezone + ", Sunrise: "+ foreSunrise + ", Sunset: "+ foreSunset)
+                console.log("Day: " + foreDay + ", Icon: " +foreIcon+ ", Temp: " + foreTemp + ", Feels like: "+ foreFeels +", Wind: " +foreWind+ ", Humidity: " + foreHumidity + ", Cloudiness:" + foreClouds + "%, Rain probability: "+ rainProbability +"%"  + ", Country: "+ foreCountry + ", Timezone: "+ foreTimezone + ", Sunrise: "+ foreSunrise + ", Sunset: "+ foreSunset)
 
                 var foreList = document.createElement("div");
                 foreList.setAttribute("class", "col-12 col-xl");
