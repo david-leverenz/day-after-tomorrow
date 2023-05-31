@@ -114,35 +114,8 @@ function getInput() {
 getInput();
 
 var displayDay = dayjs("6-14-2023").format("M-D-YYYY");
-var inputDay = dayjs("6-14-2023");
 
-// console.log(inputDay);
-// console.log(displayDay);
-
-// Get the current day and format it the way I want.
-
-// dayjs.extend(customParseFormat);
 var today = dayjs().format("M-D-YYYY");
-
-// console.log(today);
-
-
-var determineArrayPosition = function () {
-    if (inputDay.diff(today, "day") > 30) {
-        alert("We can't see that far into the future.  Please select a day no more than 30 days into the future.");
-        return;
-    } else if (inputDay.diff(today, "day") <= 30) {
-        var arrayPosition = inputDay.diff(today, "day");
-        return arrayPosition;
-
-        // console.log("Made it to where i should display");
-        // console.log(i);
-    }
-}
-
-// determineArrayPosition();
-
-
 
 var getForecast = function (latitude, longitude) {
     var fiveDayURL = "https://api.openweathermap.org/data/2.5/forecast?lat=" + latitude + "&lon=" + longitude + "&appid=44be570f60fd1ef1f012456a39e5a0ff";
@@ -151,15 +124,25 @@ var getForecast = function (latitude, longitude) {
     fetch(fiveDayURL).then(function (response) {
         response.json().then(function (forecastData) {
 
-            // console.log(forecastData);
+            var promptDay = prompt("Enter a day MM-DD-YYYY");
+
+            var inputDay = dayjs(promptDay);
+
+            var determineArrayPosition = function () {
+                if (inputDay.diff(today, "day") > 30) {
+                    alert("We can't see that far into the future.  Please select a day no more than 30 days into the future.");
+                    return;
+                } else if (inputDay.diff(today, "day") <= 30) {
+                    var arrayPosition = inputDay.diff(today, "day");
+                    return arrayPosition;
+                }
+            }
 
             var dayChosen = determineArrayPosition();
 
-            // i is the arrayPosition calculated from inputDay-today
+            console.log(dayChosen);
 
             // rowDivEl.innerHTML = "";
-
-            // console.log(dayChosen);
 
             var foreCity = forecastData.city.name;
             var foreDay = dayjs().add([dayChosen], "day").format("M/D/YYYY");
