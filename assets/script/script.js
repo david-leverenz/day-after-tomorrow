@@ -73,11 +73,12 @@ var searchedCities = document.querySelector("#searched-cities");
 //     }
 // };
 
+
 // This function inserts the city into the apiURL then fetches the latitude and longitude of the city.  It checks the cities in the storage array and if the current searched city is not in the array, it adds it to the array.  If it's already in there it doesn't re-add the city to the array.  Then it runs the getWeather and getFiveDay functions.
 
-var getLatLonCity = function (city) {
+var getLatLonCity = function (city, country) {
 
-    var apiURL = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=44be570f60fd1ef1f012456a39e5a0ff";
+    var apiURL = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "," + country+"&limit=1&appid=44be570f60fd1ef1f012456a39e5a0ff";
 
     fetch(apiURL).then(function (response) {
 
@@ -102,7 +103,15 @@ var getLatLonCity = function (city) {
     })
 };
 
-getLatLonCity("Chicago");
+function getInput() {
+    var cityName = prompt("Enter a city name");
+
+    var countryName = prompt("Enter a country name");
+    
+    getLatLonCity(cityName, countryName);
+}
+
+getInput();
 
 var displayDay = dayjs("6-14-2023").format("M-D-YYYY");
 var inputDay = dayjs("6-14-2023");
@@ -132,6 +141,7 @@ var determineArrayPosition = function () {
 }
 
 // determineArrayPosition();
+
 
 
 var getForecast = function (latitude, longitude) {
