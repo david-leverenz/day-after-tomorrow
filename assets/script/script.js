@@ -17,9 +17,9 @@ var searchedCities = document.querySelector("#searched-cities");
 
 // More variable declarations so that they can be called outside of the function in which they are gathered.
 
-var latitude = "string";
-var longitude = "string";
-var cityName = "string";
+// var latitude = "string";
+// var longitude = "string";
+// var cityName = "string";
 
 // Create a function to get the city name and iterate through the cities in storage and display them on a button on the page.
 
@@ -102,7 +102,7 @@ var getLatLonCity = function (city) {
     })
 };
 
-getLatLonCity("Paris");
+getLatLonCity("Avilla");
 
 var displayDay = dayjs("6-14-2023").format("M-D-YYYY");
 var inputDay = dayjs("6-14-2023");
@@ -154,10 +154,24 @@ var getForecast = function (latitude, longitude) {
                 var foreDay = dayjs().add([dayChosen], "day").format("M/D/YYYY");
                 var foreIcon = forecastData.list[dayChosen].weather[0].icon;
                 var foreTemp = ((((forecastData.list[dayChosen].main.temp) - 273.15) * 1.8) + 32).toFixed(2) + " F";
+                var foreFeels = ((((forecastData.list[dayChosen].main.feels_like) - 273.15) * 1.8) + 32).toFixed(2) + " F";
                 var foreWind = forecastData.list[dayChosen].wind.speed;
                 var foreHumidity = forecastData.list[dayChosen].main.humidity;
+                var foreClouds =forecastData.list[dayChosen].clouds.all;
+                var foreRain =forecastData.list[dayChosen].pop;
+                var foreRain3 = forecastData.list[dayChosen].rain;
+                var foreSnow3 = forecastData.list[dayChosen].snow;
+                var foreCountry = forecastData.city.country;
+                var foreTimezone = forecastData.city.timezone;
+                var foreSunrise = forecastData.city.sunrise;
+                var foreSunset = forecastData.city.sunset;
 
-                console.log("Day: " + foreDay + ", Icon: " +foreIcon+ ", Temp: " + foreTemp + ", Wind: " +foreWind+ ", Humidity: " + foreHumidity);
+                console.log(foreCountry);
+
+                rainProbability = foreRain*100;
+
+
+                console.log("Day: " + foreDay + ", Icon: " +foreIcon+ ", Temp: " + foreTemp + ", Feels like: "+ foreFeels +", Wind: " +foreWind+ ", Humidity: " + foreHumidity + ", Cloudiness:" + foreClouds + "%, Rain probability: "+ rainProbability +"%"  + ", Rain in the last 3 hours: "+ foreRain3 + ", Snow in the last 3 hours: "+ foreSnow3 + ", Country: "+ foreCountry + ", Timezone: "+ foreTimezone + ", Sunrise: "+ foreSunrise + ", Sunset: "+ foreSunset)
 
                 var foreList = document.createElement("div");
                 foreList.setAttribute("class", "col-12 col-xl");
