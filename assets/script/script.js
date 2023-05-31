@@ -165,14 +165,34 @@ var getForecast = function (latitude, longitude) {
                 var foreSunset = forecastData.city.sunset;
 
                 var sunriseArray= dayjs.unix(foreSunrise);
+                var sunsetArray= dayjs.unix(foreSunset);
 
                 console.log(sunriseArray);
+                console.log(sunsetArray);
 
-                console.log(sunriseArray.$H);
+                if (sunriseArray.$H < 12) {
+                    var riseAmpm = "a.m."
+                } else {
+                    var riseAmpm = "p.m."
+                }
+
+                if (sunsetArray.$H < 12) {
+                    var twelveHour= sunsetArray.$H;
+                    var setAmpm = "a.m.";
+                } else {
+                    var twelveHour = sunsetArray.$H-12;
+                    var setAmpm = "p.m.";
+                }
+
+                console.log(sunsetArray.$H+":"+sunsetArray.$m+" "+setAmpm);
+                var sunrise12Format = sunriseArray.$H+":"+sunriseArray.$m+" "+riseAmpm
+                var sunset12Format = twelveHour+":"+sunsetArray.$m+" " + setAmpm
 
                 rainProbability = foreRain*100;
 
-                console.log("Day: " + foreDay + ", Icon: " +foreIcon+ ", Temp: " + foreTemp + ", Feels like: "+ foreFeels +", Wind: " +foreWind+ ", Humidity: " + foreHumidity + ", Cloudiness:" + foreClouds + "%, Rain probability: "+ rainProbability +"%"  + ", Country: "+ foreCountry + ", Timezone: "+ foreTimezone + ", Sunrise: "+ foreSunrise + ", Sunset: "+ foreSunset)
+                var weatherStuff = "Day: " + foreDay + "\n"+ "Icon:  " + foreIcon+ "\n"+ "Temp: " + foreTemp + "\n"+ "Feels like: "+ foreFeels +"\n"+ "Wind: " +foreWind+ "\n"+ "Humidity: " + foreHumidity + "\n"+ "Cloudiness:" + foreClouds +  "%, "+ "\n"+"Rain probability: "+ rainProbability +"%" + "\n"+"Country: "+ foreCountry + "\n"+"Timezone: "+ foreTimezone + "\n"+"Sunrise: "+ sunrise12Format + "\n"+"Sunset: "+ sunset12Format;
+
+                console.log(weatherStuff);
 
                 var foreList = document.createElement("div");
                 foreList.setAttribute("class", "col-12 col-xl");
