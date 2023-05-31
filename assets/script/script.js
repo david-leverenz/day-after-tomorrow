@@ -93,7 +93,7 @@ var getLatLonCity = function (city) {
                     //     localStorage.setItem("citySearch", JSON.stringify(citiesInStorage));
                     // }
 
-                    console.log(latitude, longitude, cityName)
+                    // console.log(latitude, longitude, cityName)
 
                     getForecast(latitude, longitude);
                 }
@@ -102,7 +102,7 @@ var getLatLonCity = function (city) {
     })
 };
 
-getLatLonCity("Avilla");
+getLatLonCity("Chicago");
 
 var displayDay = dayjs("6-14-2023").format("M-D-YYYY");
 var inputDay = dayjs("6-14-2023");
@@ -119,11 +119,11 @@ var today = dayjs().format("M-D-YYYY");
 
 
 var determineArrayPosition = function () {
-    if (inputDay.diff(today,"day")>30) {
+    if (inputDay.diff(today, "day") > 30) {
         alert("We can't see that far into the future.  Please select a day no more than 30 days into the future.");
         return;
-    } else if (inputDay.diff(today,"day")<=30) {
-        var arrayPosition = inputDay.diff(today,"day");
+    } else if (inputDay.diff(today, "day") <= 30) {
+        var arrayPosition = inputDay.diff(today, "day");
         return arrayPosition;
 
         // console.log("Made it to where i should display");
@@ -141,7 +141,7 @@ var getForecast = function (latitude, longitude) {
     fetch(fiveDayURL).then(function (response) {
         response.json().then(function (forecastData) {
 
-            console.log(forecastData);
+            // console.log(forecastData);
 
             var dayChosen = determineArrayPosition();
 
@@ -149,82 +149,86 @@ var getForecast = function (latitude, longitude) {
 
             // rowDivEl.innerHTML = "";
 
-            console.log(dayChosen);
-           
-                var foreDay = dayjs().add([dayChosen], "day").format("M/D/YYYY");
-                var foreIcon = forecastData.list[dayChosen].weather[0].icon;
-                var foreTemp = ((((forecastData.list[dayChosen].main.temp) - 273.15) * 1.8) + 32).toFixed(2) + " F";
-                var foreFeels = ((((forecastData.list[dayChosen].main.feels_like) - 273.15) * 1.8) + 32).toFixed(2) + " F";
-                var foreWind = forecastData.list[dayChosen].wind.speed;
-                var foreHumidity = forecastData.list[dayChosen].main.humidity;
-                var foreClouds =forecastData.list[dayChosen].clouds.all;
-                var foreRain =forecastData.list[dayChosen].pop;
-                var foreCountry = forecastData.city.country;
-                var foreTimezone = forecastData.city.timezone;
-                var foreSunrise = forecastData.city.sunrise;
-                var foreSunset = forecastData.city.sunset;
+            // console.log(dayChosen);
 
-                var sunriseArray= dayjs.unix(foreSunrise);
-                var sunsetArray= dayjs.unix(foreSunset);
+            var foreCity = forecastData.city.name;
+            var foreDay = dayjs().add([dayChosen], "day").format("M/D/YYYY");
+            var foreIcon = forecastData.list[dayChosen].weather[0].icon;
+            var foreTemp = ((((forecastData.list[dayChosen].main.temp) - 273.15) * 1.8) + 32).toFixed(2) + " F";
+            var foreFeels = ((((forecastData.list[dayChosen].main.feels_like) - 273.15) * 1.8) + 32).toFixed(2) + " F";
+            var foreWind = forecastData.list[dayChosen].wind.speed;
+            var foreHumidity = forecastData.list[dayChosen].main.humidity;
+            var foreClouds = forecastData.list[dayChosen].clouds.all;
+            var foreRain = forecastData.list[dayChosen].pop;
+            var foreCountry = forecastData.city.country;
+            var foreTimezone = forecastData.city.timezone;
+            var foreSunrise = forecastData.city.sunrise;
+            var foreSunset = forecastData.city.sunset;
 
-                console.log(sunriseArray);
-                console.log(sunsetArray);
+            var sunriseArray = dayjs.unix(foreSunrise);
+            var sunsetArray = dayjs.unix(foreSunset);
 
-                if (sunriseArray.$H < 12) {
-                    var riseAmpm = "a.m."
-                } else {
-                    var riseAmpm = "p.m."
-                }
+            var timezoneFormatted =" (UTC " + foreTimezone / 3600 + " hours)";
+            // console.log(foreCity);
 
-                if (sunsetArray.$H < 12) {
-                    var twelveHour= sunsetArray.$H;
-                    var setAmpm = "a.m.";
-                } else {
-                    var twelveHour = sunsetArray.$H-12;
-                    var setAmpm = "p.m.";
-                }
+            // console.log(sunriseArray);
+            // console.log(sunsetArray);
 
-                console.log(sunsetArray.$H+":"+sunsetArray.$m+" "+setAmpm);
-                var sunrise12Format = sunriseArray.$H+":"+sunriseArray.$m+" "+riseAmpm
-                var sunset12Format = twelveHour+":"+sunsetArray.$m+" " + setAmpm
+            if (sunriseArray.$H < 12) {
+                var riseAmpm = "a.m."
+            } else {
+                var riseAmpm = "p.m."
+            }
 
-                rainProbability = foreRain*100;
+            if (sunsetArray.$H < 12) {
+                var twelveHour = sunsetArray.$H;
+                var setAmpm = "a.m.";
+            } else {
+                var twelveHour = sunsetArray.$H - 12;
+                var setAmpm = "p.m.";
+            }
 
-                var weatherStuff = "Day: " + foreDay + "\n"+ "Icon:  " + foreIcon+ "\n"+ "Temp: " + foreTemp + "\n"+ "Feels like: "+ foreFeels +"\n"+ "Wind: " +foreWind+ "\n"+ "Humidity: " + foreHumidity + "\n"+ "Cloudiness:" + foreClouds +  "%, "+ "\n"+"Rain probability: "+ rainProbability +"%" + "\n"+"Country: "+ foreCountry + "\n"+"Timezone: "+ foreTimezone + "\n"+"Sunrise: "+ sunrise12Format + "\n"+"Sunset: "+ sunset12Format;
+            // console.log(sunsetArray.$H+":"+sunsetArray.$m+" "+setAmpm);
+            var sunrise12Format = sunriseArray.$H + ":" + sunriseArray.$m + " " + riseAmpm
+            var sunset12Format = twelveHour + ":" + sunsetArray.$m + " " + setAmpm
 
-                console.log(weatherStuff);
+            rainProbability = foreRain * 100;
 
-                var foreList = document.createElement("div");
-                foreList.setAttribute("class", "col-12 col-xl");
-                var cardEl = document.createElement("div");
-                cardEl.setAttribute("class", "card p-3 my-2 fs-6");
-                var titleEl = document.createElement("h4");
-                var tempEl = document.createElement("p");
-                var windEl = document.createElement("p");
-                var humidityEl = document.createElement("p");
-                titleEl.textContent = foreDay;
-                tempEl.textContent = "TEMP: " + foreTemp;
-                windEl.textContent = "WIND: " + foreWind + " MPH";
-                humidityEl.textContent = "HUMIDITY: " + foreHumidity + "%";
+            var weatherStuff = "Day: " + foreDay + "\n" + "City: " +foreCity +"\n"+ "Country: " + foreCountry + "\n"  + "Timezone: " + timezoneFormatted +"\n"+ "Weather icon:  " + foreIcon + "\n" + "Temp: " + foreTemp + "\n" + "Feels like: " + foreFeels + "\n" + "Wind: " + foreWind + "\n" + "Humidity: " + foreHumidity + "\n" + "Cloudiness:" + foreClouds + "%, " + "\n" + "Rain probability: " + rainProbability + "%" +  "\n" + "Sunrise: " + sunrise12Format + "\n" + "Sunset: " + sunset12Format;
 
-                var weatherPicture = "https://openweathermap.org/img/w/" + foreIcon + ".png";
+            console.log(weatherStuff);
+
+            var foreList = document.createElement("div");
+            foreList.setAttribute("class", "col-12 col-xl");
+            var cardEl = document.createElement("div");
+            cardEl.setAttribute("class", "card p-3 my-2 fs-6");
+            var titleEl = document.createElement("h4");
+            var tempEl = document.createElement("p");
+            var windEl = document.createElement("p");
+            var humidityEl = document.createElement("p");
+            titleEl.textContent = foreDay;
+            tempEl.textContent = "TEMP: " + foreTemp;
+            windEl.textContent = "WIND: " + foreWind + " MPH";
+            humidityEl.textContent = "HUMIDITY: " + foreHumidity + "%";
+
+            var weatherPicture = "https://openweathermap.org/img/w/" + foreIcon + ".png";
 
 
-                // var pic = document.createElement("img");
-                // pic.setAttribute("alt", "weather icon");
-                // pic.src = weatherPicture;
-                // pic.setAttribute("height", "50");
-                // pic.setAttribute("width", "50");
+            // var pic = document.createElement("img");
+            // pic.setAttribute("alt", "weather icon");
+            // pic.src = weatherPicture;
+            // pic.setAttribute("height", "50");
+            // pic.setAttribute("width", "50");
 
-                // cardEl.appendChild(titleEl);
-                // cardEl.appendChild(pic);
+            // cardEl.appendChild(titleEl);
+            // cardEl.appendChild(pic);
 
-                // cardEl.appendChild(tempEl);
-                // cardEl.appendChild(humidityEl);
-                // cardEl.appendChild(windEl);
-                // foreList.appendChild(cardEl);
-                // rowDivEl.appendChild(foreList);
-           
+            // cardEl.appendChild(tempEl);
+            // cardEl.appendChild(humidityEl);
+            // cardEl.appendChild(windEl);
+            // foreList.appendChild(cardEl);
+            // rowDivEl.appendChild(foreList);
+
         })
     });
 }
