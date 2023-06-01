@@ -163,9 +163,6 @@ var getForecast = function (latitude, longitude) {
 
             var timezoneFormatted = " (UTC " + foreTimezone / 3600 + " hours)";
 
-            console.log(sunriseArray);
-            console.log(sunsetArray);
-
             if (sunriseArray.$H < 12) {
                 var riseAmpm = "a.m."
             } else {
@@ -180,14 +177,16 @@ var getForecast = function (latitude, longitude) {
                 var setAmpm = "p.m.";
             }
 
-            // Problem: if the minutes part of the sunrise or sunset time ends in 0, the dayjs displays a single number so "5:30 a.m." appears as "5:3 a.m."
+                     if (sunriseArray.$m.toString().length == 1) {
+                var fullSunriseMinutes = sunriseArray.$m + "0";
+            } else (fullSunriseMinutes = sunriseArray.$m);
 
-            console.log(sunriseArray.$m);
-            console.log(sunriseArray.$m.length);
+            if (sunsetArray.$m.toString().length == 1) {
+                var fullSunsetMinutes = sunsetArray.$m + "0";
+            } else (fullSunsetMinutes = sunsetArray.$m);
 
-            // console.log(sunsetArray.$H+":"+sunsetArray.$m+" "+setAmpm);
-            var sunrise12Format = sunriseArray.$H + ":" + sunriseArray.$m + " " + riseAmpm
-            var sunset12Format = twelveHour + ":" + sunsetArray.$m + " " + setAmpm
+            var sunrise12Format = sunriseArray.$H + ":" + fullSunriseMinutes + " " + riseAmpm
+            var sunset12Format = twelveHour + ":" + fullSunsetMinutes + " " + setAmpm
 
             rainProbability = foreRain * 100;
 
