@@ -12,6 +12,7 @@ var forePicture = document.querySelector("#fore-icon")
 var cityList = document.querySelector("#cities");
 var cardContainer = document.querySelector("#card-container");
 var searchedCities = document.querySelector("#searched-cities");
+var forecast_Data = document.querySelector("#forecast-data");
 
 
 
@@ -74,7 +75,51 @@ var searchedCities = document.querySelector("#searched-cities");
 // };
 
 
+function map(latitude, longitude){
+    var API_KEY = "7ZuASDGIDYaSxAwpTaBAcI5E3Eqe7pq4";
+    // var MADRID = [-3.703790, 40.416775];
+    // var LISBON = [-9.1319, 38.7222];
+    var coordinates = [longitude, latitude];
+    console.log(coordinates);
+    var map = tt.map({
+        key: API_KEY,
+        //center: MADRID,
+        center: coordinates,
+        zoom: 10,
+        container: 'mymap',
+    });
+    
+
+    // var moveMap = function(lnglat) {
+    // 	map.flyTo({
+    // 		center: lnglat,
+    // 		zoom: 14
+    // 	})
+    // }
+
+
+    var handleResults = function(result) {
+        console.log(result);
+        if (result.results) {
+            moveMap(result.results[0].position)
+        }
+    }
+
+
+    var search = function() {
+            tt.services.fuzzySearch({
+            key: API_KEY,
+            query: document.getElementById("query").value,
+
+            }).go().then(handleResults)
+    }
+
+    
+}
+
+
 // This function inserts the city into the apiURL then fetches the latitude and longitude of the city.  It checks the cities in the storage array and if the current searched city is not in the array, it adds it to the array.  If it's already in there it doesn't re-add the city to the array.  Then it runs the getWeather and getFiveDay functions.
+
 
 var getLatLonCity = function (city, country) {
 
@@ -97,6 +142,7 @@ var getLatLonCity = function (city, country) {
                     // console.log(latitude, longitude, cityName)
 
                     getForecast(latitude, longitude);
+                    map(latitude,longitude);
                 }
             })
         }
@@ -257,7 +303,7 @@ var getForecast = function (latitude, longitude) {
             cardEl.appendChild(sunsetEl);
             foreList.appendChild(cardEl);
             rowDivEl.appendChild(foreList);
-
+            forecast_Data.append(rowDivEl);
         })
     });
 }
