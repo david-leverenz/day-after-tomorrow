@@ -121,9 +121,9 @@ function map(latitude, longitude){
 // This function inserts the city into the apiURL then fetches the latitude and longitude of the city.  It checks the cities in the storage array and if the current searched city is not in the array, it adds it to the array.  If it's already in there it doesn't re-add the city to the array.  Then it runs the getWeather and getFiveDay functions.
 
 
-var getLatLonCity = function (city, country) {
+var getLatLonCity = function (city) {
 
-    var apiURL = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "," + country + "&limit=1&appid=44be570f60fd1ef1f012456a39e5a0ff";
+    var apiURL = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=44be570f60fd1ef1f012456a39e5a0ff";
 
     fetch(apiURL).then(function (response) {
 
@@ -143,6 +143,7 @@ var getLatLonCity = function (city, country) {
 
                     getForecast(latitude, longitude);
                     map(latitude,longitude);
+                    getNearbyResults(requestURL, latitude, longitude);
                 }
             })
         }
@@ -152,9 +153,9 @@ var getLatLonCity = function (city, country) {
 function getInput() {
     var cityName = prompt("Enter a city name");
 
-    var countryName = prompt("Enter a country name");
+    // var countryName = prompt("Enter a country name");
 
-    getLatLonCity(cityName, countryName);
+    getLatLonCity(cityName);
 }
 
 getInput();
@@ -330,28 +331,33 @@ var baseURL = "https://api.tomtom.com/search/2/nearbySearch/.json?"
 // baseurl + lat=x + &lon=y + &radius=10000 (default) + &limit=10 (default, result limit) + &categoryset=numberid (restaurant id 7315) + &openingHours=nextSevenDays (display hours of business)
 // var latitude = "";
 // var longitude = "";
-var countryCode = "";
+// var countryCode = "";
 var categoryID = "";
 var radius = "&radius=10000";
 var limit = "&limit=10";
 var appid = "&key=lQzhlUqG4GkQgblg5j1RGpsNRkCl2PrN";
 
-function getNearbyResults(requestURL) {
+function getNearbyResults(requestURL, latitude, longitude) {
     //setting default to chicago for funcitonality testing
-    if (latitude == "" && longitude == "" && countryCode == "") {
-        latitude = 41.8781136;
-        longitude = -87.6297982;
-        countryCode = "US";
+
+    var tomLatitude = latitude;
+    var tomLongitude = longitude;
+  
+    // if (latitude == "" && longitude == "" && countryCode == "") {
+        // tomLatitude = 41.8781136;
+        // tomLongitude = -87.6297982;
+        // countryCode = "US";
         // alert for empty parameters
         // alert("You must enter a city and country!");
-    }
+    // }
 
-    var lat = "lat=" + latitude;
-    var lon = "&lon=" + longitude;
-    var countrySet = "&countrySet=" + countryCode;
+    var lat = "lat=" + tomLatitude;
+    var lon = "&lon=" + tomLongitude;
+    // var countrySet = "&countrySet=" + countryCode;
     var categorySet = "&categoryset=" + categoryID;
 
-    requestURL = baseURL + lat + lon + countrySet + radius + limit + appid;
+    requestURL = baseURL + lat + lon + radius + limit + appid;
+    // requestURL = baseURL + lat + lon + countrySet + radius + limit + appid;
     console.log(requestURL);
 
     if (categoryID !== "") {
@@ -405,4 +411,3 @@ function getNearbyResults(requestURL) {
     })
 }
 
-getNearbyResults(requestURL);
