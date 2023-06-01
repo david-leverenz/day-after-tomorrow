@@ -8,6 +8,10 @@
   <title>Day After Tomorrow</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" type="text/css" href="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.18.0/maps/maps.css"
+    />
+    <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.53.0/maps/maps-web.min.js"></script>
+    <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.53.0/services/services-web.min.js"></script>
 </head>
 
 <body>
@@ -44,6 +48,11 @@
   <body class="h-full">
   ```
 -->
+
+
+
+
+
   <div class="min-h-full">
     <nav class="bg-gray-800">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -124,7 +133,13 @@
     </div>
 
 
+
   </div>
+
+  <input type="text" id="query" value="">
+	<button onclick="search()">SEARCH</button>
+
+	<div style="width:30vw; height: 30vh;" id="mymap">This is my TomTom Map!</div>
 
 
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
