@@ -177,7 +177,7 @@ var getForecast = function (latitude, longitude) {
                 var setAmpm = "p.m.";
             }
 
-                     if (sunriseArray.$m.toString().length == 1) {
+            if (sunriseArray.$m.toString().length == 1) {
                 var fullSunriseMinutes = sunriseArray.$m + "0";
             } else (fullSunriseMinutes = sunriseArray.$m);
 
@@ -190,40 +190,73 @@ var getForecast = function (latitude, longitude) {
 
             rainProbability = foreRain * 100;
 
-            var weatherStuff = "Day: " + foreDay + "\n" + "City: " + foreCity + "\n" + "Country: " + foreCountry + "\n" + "Timezone: " + timezoneFormatted + "\n" + "Weather icon:  " + foreIcon + "\n" + "Temp: " + foreTemp + "\n" + "Feels like: " + foreFeels + "\n" + "Wind: " + foreWind + "\n" + "Humidity: " + foreHumidity + "\n" + "Cloudiness:" + foreClouds + "%, " + "\n" + "Rain probability: " + rainProbability + "%" + "\n" + "Sunrise: " + sunrise12Format + "\n" + "Sunset: " + sunset12Format;
+            var weatherList = "Day: " + foreDay + "\n" + "City: " + foreCity + "\n" + "Country: " + foreCountry + "\n" + "Timezone: " + timezoneFormatted + "\n" + "Weather icon:  " + foreIcon + "\n" + "Temp: " + foreTemp + "\n" + "Feels like: " + foreFeels + "\n" + "Wind: " + foreWind + "\n" + "Humidity: " + foreHumidity + "\n" + "Cloudiness:" + foreClouds + "%, " + "\n" + "Rain probability: " + rainProbability + "%" + "\n" + "Sunrise: " + sunrise12Format + "\n" + "Sunset: " + sunset12Format;
 
-            console.log(weatherStuff);
+            console.log(weatherList);
+
+            var rowDivEl = document.createElement("div");
 
             var foreList = document.createElement("div");
             foreList.setAttribute("class", "col-12 col-xl");
+
             var cardEl = document.createElement("div");
             cardEl.setAttribute("class", "card p-3 my-2 fs-6");
+
             var titleEl = document.createElement("h4");
-            var tempEl = document.createElement("p");
-            var windEl = document.createElement("p");
-            var humidityEl = document.createElement("p");
             titleEl.textContent = foreDay;
-            tempEl.textContent = "TEMP: " + foreTemp;
-            windEl.textContent = "WIND: " + foreWind + " MPH";
-            humidityEl.textContent = "HUMIDITY: " + foreHumidity + "%";
+
+            var cityCountryEl = document.createElement("p");
+            cityCountryEl.textContent = foreCity + " (" + foreCountry + ")";
+
+            var timezoneEl = document.createElement("p");
+            timezoneEl.textContent = "Timezone: " + timezoneFormatted;
+
+            var tempEl = document.createElement("p");
+            tempEl.textContent = "Temp: " + foreTemp;
+
+            var feelsLikeEl = document.createElement("p");
+            feelsLikeEl.textContent = "Feels like: " + foreFeels;
+
+            var windEl = document.createElement("p");
+            windEl.textContent = "Wind: " + foreWind + " MPH";
+
+            var humidityEl = document.createElement("p");
+            humidityEl.textContent = "Humidity: " + foreHumidity + "%";
+
+            var cloudsEl = document.createElement("p");
+            cloudsEl.textContent = "Cloudiness: " + foreClouds;
+
+            var rainEl = document.createElement("p");
+            rainEl.textContent = "Rain probability: " + foreRain;
+
+            var sunriseEl = document.createElement("p");
+            sunriseEl.textContent = "Sunrise: " + sunrise12Format;
+
+            var sunsetEl = document.createElement("p");
+            sunsetEl.textContent = "Sunset: " + sunset12Format;
 
             var weatherPicture = "https://openweathermap.org/img/w/" + foreIcon + ".png";
 
+            var pic = document.createElement("img");
+            pic.setAttribute("alt", "weather icon");
+            pic.src = weatherPicture;
+            pic.setAttribute("height", "50");
+            pic.setAttribute("width", "50");
 
-            // var pic = document.createElement("img");
-            // pic.setAttribute("alt", "weather icon");
-            // pic.src = weatherPicture;
-            // pic.setAttribute("height", "50");
-            // pic.setAttribute("width", "50");
-
-            // cardEl.appendChild(titleEl);
-            // cardEl.appendChild(pic);
-
-            // cardEl.appendChild(tempEl);
-            // cardEl.appendChild(humidityEl);
-            // cardEl.appendChild(windEl);
-            // foreList.appendChild(cardEl);
-            // rowDivEl.appendChild(foreList);
+            cardEl.appendChild(titleEl);
+            cardEl.appendChild(pic);
+            cardEl.appendChild(cityCountryEl);
+            cardEl.appendChild(timezoneEl);
+            cardEl.appendChild(tempEl);
+            cardEl.appendChild(feelsLikeEl);
+            cardEl.appendChild(windEl);
+            cardEl.appendChild(humidityEl);
+            cardEl.appendChild(cloudsEl);
+            cardEl.appendChild(rainEl);
+            cardEl.appendChild(sunriseEl);
+            cardEl.appendChild(sunsetEl);
+            foreList.appendChild(cardEl);
+            rowDivEl.appendChild(foreList);
 
         })
     });
