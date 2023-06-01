@@ -12,6 +12,7 @@ var forePicture = document.querySelector("#fore-icon")
 var cityList = document.querySelector("#cities");
 var cardContainer = document.querySelector("#card-container");
 var searchedCities = document.querySelector("#searched-cities");
+var forecast_Data = document.querySelector("#forecast-data");
 
 
 
@@ -302,7 +303,7 @@ var getForecast = function (latitude, longitude) {
             cardEl.appendChild(sunsetEl);
             foreList.appendChild(cardEl);
             rowDivEl.appendChild(foreList);
-
+            forecast_Data.append(rowDivEl);
         })
     });
 }
