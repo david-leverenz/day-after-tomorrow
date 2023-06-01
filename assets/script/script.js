@@ -312,3 +312,97 @@ var getForecast = function (latitude, longitude) {
 
 // submitEl.addEventListener("submit", formSubmitHandler);
 // cityList.addEventListener("click", buttonClickHandler);
+
+// Here are some notes for tomtomapi
+
+//pseudo-code:
+//
+//save btn - add save local storage event of fave places.
+//basic info for each result name/phone/address/category/url
+//address url links, location (address), categories-relevant data hotels, food, 
+//append data to card in html
+//dynamically create card within set limit in fetch req data obj output
+//
+
+var requestURL = "https://api.tomtom.com/search/2/nearbySearch/.json?lat=41.8781136&lon=-87.6297982&radius=10000&key=lQzhlUqG4GkQgblg5j1RGpsNRkCl2PrN";
+
+var baseURL = "https://api.tomtom.com/search/2/nearbySearch/.json?"
+// baseurl + lat=x + &lon=y + &radius=10000 (default) + &limit=10 (default, result limit) + &categoryset=numberid (restaurant id 7315) + &openingHours=nextSevenDays (display hours of business)
+// var latitude = "";
+// var longitude = "";
+var countryCode = "";
+var categoryID = "";
+var radius = "&radius=10000";
+var limit = "&limit=10";
+var appid = "&key=lQzhlUqG4GkQgblg5j1RGpsNRkCl2PrN";
+
+function getNearbyResults(requestURL) {
+    //setting default to chicago for funcitonality testing
+    if (latitude == "" && longitude == "" && countryCode == "") {
+        latitude = 41.8781136;
+        longitude = -87.6297982;
+        countryCode = "US";
+        // alert for empty parameters
+        // alert("You must enter a city and country!");
+    }
+
+    var lat = "lat=" + latitude;
+    var lon = "&lon=" + longitude;
+    var countrySet = "&countrySet=" + countryCode;
+    var categorySet = "&categoryset=" + categoryID;
+
+    requestURL = baseURL + lat + lon + countrySet + radius + limit + appid;
+    console.log(requestURL);
+
+    if (categoryID !== "") {
+        requestURL + categorySet;
+    }
+
+    fetch(requestURL)
+    .then(function (response) {
+        console.log(response);
+
+        if (response.status === 200) {
+            console.log("working");
+        } else {
+            console.log("try again loser");
+        }
+        return response.json();
+    })
+    .then(function (data){
+        console.log(data);
+        let resultsList = data.results;
+        console.log(resultsList);
+        //logging entire data object, then isolating results
+
+        for (let  index = 0; index < resultsList.length; index++) {
+            // let resultCard = document.createElement("div");
+            // resultCard.setAttribute("class", "result-card");
+            // resultCard.setAttribute("id", "result-info" + [index]);
+            // 
+            //going through result by index and retrieving relevant data and saving to object
+            let result = {
+                Name: resultsList[index].poi.name,
+                Address: resultsList[index].address.freeformAddress,
+                Categories: resultsList[index].poi.categories.join(),
+                Phone: resultsList[index].poi.phone,
+                Link: resultsList[index].poi.url,
+            };
+            //if no entry in fetch data, entry for result obj is deleted
+            if (result.Phone == undefined) {
+                delete result.Phone;
+            }
+            if (result.Link == undefined) {
+                delete result.Link;
+            }
+            console.log(result);
+            //preparing result obj to display entries as a readable text
+            for (const [key, value] of Object.entries(result)) {
+                console.log(`${key}: ${value}`);
+                //resultCard.innerText = "${key}: ${value}");
+              }
+        }
+    })
+}
+
+getNearbyResults(requestURL);
