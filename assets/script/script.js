@@ -161,9 +161,9 @@ function getInput() {
     getLatLonCity(cityName);
 
 }
-var searchButton = document.getElementById("search-button");
+var submitButton = document.getElementById("submit-button");
 
-searchButton.addEventListener("click", getInput);
+submitButton.addEventListener("click", getInput);
 
 
 
