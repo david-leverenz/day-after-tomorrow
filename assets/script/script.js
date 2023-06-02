@@ -49,34 +49,34 @@ var inputDay;
 // };
 
 // Create a function to get the city name and iterate through the cities in storage and display them on a button on the page.
-var citiesInStorage = JSON.parse(localStorage.getItem("citySearch")) || []
+// var citiesInStorage = JSON.parse(localStorage.getItem("citySearch")) || []
 
-var formSubmitHandler = function (event) {
-    event.preventDefault();
+// var formSubmitHandler = function (event) {
+//     event.preventDefault();
 
-    var cityName = cityInput.value.trim();
+//     var cityName = cityInput.value.trim();
 
-    if (cityName) {
+//     if (cityName) {
 
-        getLatLonCity(cityName);
-        document.getElementById("cities").innerHTML = "";
+//         getLatLonCity(cityName);
+//         document.getElementById("cities").innerHTML = "";
 
-        searchedCities.setAttribute("class", "border-top border-secondary border-3 m-3 p-2 searched-cities text-center");
+//         searchedCities.setAttribute("class", "border-top border-secondary border-3 m-3 p-2 searched-cities text-center");
 
-        for (let i = 0; i < citiesInStorage.length; i++) {
-            var cityButton = document.createElement("button");
-            cityButton.setAttribute("class", "btn m-1 btn-secondary align-items-center");
-            cityButton.textContent = citiesInStorage[i];
-            document.getElementById("cities").appendChild(cityButton);
-        }
+//         for (let i = 0; i < citiesInStorage.length; i++) {
+//             var cityButton = document.createElement("button");
+//             cityButton.setAttribute("class", "btn m-1 btn-secondary align-items-center");
+//             cityButton.textContent = citiesInStorage[i];
+//             document.getElementById("cities").appendChild(cityButton);
+//         }
 
-    } else {
-        alert("Please enter a city name.");
-    }
-};
+//     } else {
+//         alert("Please enter a city name.");
+//     }
+// };
 
 
-function map(latitude, longitude){
+function map(latitude, longitude) {
     var API_KEY = "7ZuASDGIDYaSxAwpTaBAcI5E3Eqe7pq4";
     // var MADRID = [-3.703790, 40.416775];
     // var LISBON = [-9.1319, 38.7222];
@@ -89,7 +89,7 @@ function map(latitude, longitude){
         zoom: 10,
         container: 'mymap',
     });
-    
+
 
     // var moveMap = function(lnglat) {
     // 	map.flyTo({
@@ -99,7 +99,7 @@ function map(latitude, longitude){
     // }
 
 
-    var handleResults = function(result) {
+    var handleResults = function (result) {
         console.log(result);
         if (result.results) {
             moveMap(result.results[0].position)
@@ -107,29 +107,31 @@ function map(latitude, longitude){
     }
 
 
-    var search = function() {
-            tt.services.fuzzySearch({
+    var search = function () {
+        tt.services.fuzzySearch({
             key: API_KEY,
             query: document.getElementById("query").value,
 
-            }).go().then(handleResults)
+        }).go().then(handleResults)
     }
 
-    
+
 }
 
 
 // This function inserts the city into the apiURL then fetches the latitude and longitude of the city.  It checks the cities in the storage array and if the current searched city is not in the array, it adds it to the array.  If it's already in there it doesn't re-add the city to the array.  Then it runs the getWeather and getFiveDay functions.
 
 
-var getLatLonCity = function (cityName) {
+var getLatLonCity = function (city) {
 
-    var apiURL = "https://api.openweathermap.org/geo/1.0/direct?q=" + cityName + "&limit=1&appid=44be570f60fd1ef1f012456a39e5a0ff";
+    var apiURL = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=44be570f60fd1ef1f012456a39e5a0ff";
 
     fetch(apiURL).then(function (response) {
 
         if (response.ok) {
             response.json().then(function (data) {
+                console.log(data);
+
                 for (var i = 0; i < data.length; i++) {
                     latitude = data[i].lat;
                     longitude = data[i].lon;
@@ -145,7 +147,7 @@ var getLatLonCity = function (cityName) {
                     // console.log(latitude, longitude, cityName)
 
                     getForecast(latitude, longitude);
-                    map(latitude,longitude);
+                    map(latitude, longitude);
                     getNearbyResults(requestURL, latitude, longitude);
                 }
             })
@@ -153,17 +155,29 @@ var getLatLonCity = function (cityName) {
     })
 };
 
-function getInput() {
-    var cityName = document.getElementById("location-search").value;
-    var inputDate = document.getElementById("date-input");
-    inputDay = dayjs(inputDate.value).format("M-D-YYYY");
 
+function getInputCity(event) {
+
+    event.preventDefault();
+
+    cityName = document.getElementById("location-search").value;
+    console.log(cityName);
     getLatLonCity(cityName);
 
 }
-var searchButton = document.getElementById("search-button");
 
-searchButton.addEventListener("click", getInput);
+function getInputDate(event) {
+    event.preventDefault();
+    var inputDate = document.getElementById("date-input");
+    inputDay = dayjs(inputDate.value);
+    console.log(inputDay);
+
+    return inputDay;
+}
+var submitButton = document.getElementById("submit-button");
+
+submitButton.addEventListener("click", getInputCity);
+submitButton.addEventListener("click", getInputDate);
 
 
 
@@ -172,7 +186,17 @@ var displayDay = dayjs("6-14-2023").format("M-D-YYYY");
 var today = dayjs().format("M-D-YYYY");
 
 
- 
+
+function determineArrayPosition() {
+    console.log(inputDay, typeof(inputDay));
+    if (inputDay.diff(today, "day") > 30) {
+        alert("We can't see that far into the future.  Please select a day no more than 30 days into the future.");
+        return;
+    } else {
+        var arrayPosition = inputDay.diff(today, "day");
+        return arrayPosition;
+    }
+};
 
 var getForecast = function (latitude, longitude) {
     var fiveDayURL = "https://api.openweathermap.org/data/2.5/forecast?lat=" + latitude + "&lon=" + longitude + "&appid=44be570f60fd1ef1f012456a39e5a0ff";
@@ -180,23 +204,15 @@ var getForecast = function (latitude, longitude) {
 
     fetch(fiveDayURL).then(function (response) {
         response.json().then(function (forecastData) {
-            var inputDate = document.getElementById("date-input");
-            inputDay = dayjs(inputDate.value).format("M-D-YYYY");
+            // var inputDate = document.getElementById("date-input");
+            // inputDay = dayjs(inputDate.value).format("M-D-YYYY");
             // var promptDay = prompt("Enter a day MM-DD-YYYY");
 
 
-            var determineArrayPosition = function () {
-                if (inputDay.diff(today, "day") > 30) {
-                    alert("We can't see that far into the future.  Please select a day no more than 30 days into the future.");
-                    return;
-                    var arrayPosition = inputDay.diff(today, "day");
-                    return arrayPosition;
-                }
-            }
 
             var dayChosen = determineArrayPosition();
 
-            // console.log(dayChosen);
+            console.log(dayChosen);
 
             // rowDivEl.innerHTML = "";
 
@@ -209,6 +225,7 @@ var getForecast = function (latitude, longitude) {
             var foreHumidity = forecastData.list[dayChosen].main.humidity;
             var foreClouds = forecastData.list[dayChosen].clouds.all;
             var foreRain = forecastData.list[dayChosen].pop;
+            var foreCity = forecastData.city.name;
             var foreCountry = forecastData.city.country;
             var foreTimezone = forecastData.city.timezone;
             var foreSunrise = forecastData.city.sunrise;
@@ -246,9 +263,9 @@ var getForecast = function (latitude, longitude) {
 
             rainProbability = foreRain * 100;
 
-            var weatherList = "Day: " + foreDay + "\n" + "City: " + foreCity + "\n" + "Country: " + foreCountry + "\n" + "Timezone: " + timezoneFormatted + "\n" + "Weather icon:  " + foreIcon + "\n" + "Temp: " + foreTemp + "\n" + "Feels like: " + foreFeels + "\n" + "Wind: " + foreWind + "\n" + "Humidity: " + foreHumidity + "\n" + "Cloudiness:" + foreClouds + "%, " + "\n" + "Rain probability: " + rainProbability + "%" + "\n" + "Sunrise: " + sunrise12Format + "\n" + "Sunset: " + sunset12Format;
+            // var weatherList = "Day: " + foreDay + "\n" + "City: " + foreCity + "\n" + "Country: " + foreCountry + "\n" + "Timezone: " + timezoneFormatted + "\n" + "Weather icon:  " + foreIcon + "\n" + "Temp: " + foreTemp + "\n" + "Feels like: " + foreFeels + "\n" + "Wind: " + foreWind + "\n" + "Humidity: " + foreHumidity + "\n" + "Cloudiness:" + foreClouds + "%, " + "\n" + "Rain probability: " + rainProbability + "%" + "\n" + "Sunrise: " + sunrise12Format + "\n" + "Sunset: " + sunset12Format;
 
-            console.log(weatherList);
+            // console.log(weatherList);
 
             var rowDivEl = document.createElement("div");
 
@@ -352,13 +369,13 @@ function getNearbyResults(requestURL, latitude, longitude) {
 
     var tomLatitude = latitude;
     var tomLongitude = longitude;
-  
+
     // if (latitude == "" && longitude == "" && countryCode == "") {
-        // tomLatitude = 41.8781136;
-        // tomLongitude = -87.6297982;
-        // countryCode = "US";
-        // alert for empty parameters
-        // alert("You must enter a city and country!");
+    // tomLatitude = 41.8781136;
+    // tomLongitude = -87.6297982;
+    // countryCode = "US";
+    // alert for empty parameters
+    // alert("You must enter a city and country!");
     // }
 
     var lat = "lat=" + tomLatitude;
@@ -375,50 +392,50 @@ function getNearbyResults(requestURL, latitude, longitude) {
     }
 
     fetch(requestURL)
-    .then(function (response) {
-        console.log(response);
+        .then(function (response) {
+            console.log(response);
 
-        if (response.status === 200) {
-            console.log("working");
-        } else {
-            console.log("try again loser");
-        }
-        return response.json();
-    })
-    .then(function (data){
-        console.log(data);
-        let resultsList = data.results;
-        console.log(resultsList);
-        //logging entire data object, then isolating results
+            if (response.status === 200) {
+                console.log("working");
+            } else {
+                console.log("try again loser");
+            }
+            return response.json();
+        })
+        .then(function (data) {
+            console.log(data);
+            let resultsList = data.results;
+            console.log(resultsList);
+            //logging entire data object, then isolating results
 
-        for (let  index = 0; index < resultsList.length; index++) {
-            // let resultCard = document.createElement("div");
-            // resultCard.setAttribute("class", "result-card");
-            // resultCard.setAttribute("id", "result-info" + [index]);
-            // 
-            //going through result by index and retrieving relevant data and saving to object
-            let result = {
-                Name: resultsList[index].poi.name,
-                Address: resultsList[index].address.freeformAddress,
-                Categories: resultsList[index].poi.categories.join(),
-                Phone: resultsList[index].poi.phone,
-                Link: resultsList[index].poi.url,
-            };
-            //if no entry in fetch data, entry for result obj is deleted
-            if (result.Phone == undefined) {
-                delete result.Phone;
+            for (let index = 0; index < resultsList.length; index++) {
+                // let resultCard = document.createElement("div");
+                // resultCard.setAttribute("class", "result-card");
+                // resultCard.setAttribute("id", "result-info" + [index]);
+                // 
+                //going through result by index and retrieving relevant data and saving to object
+                let result = {
+                    Name: resultsList[index].poi.name,
+                    Address: resultsList[index].address.freeformAddress,
+                    Categories: resultsList[index].poi.categories.join(),
+                    Phone: resultsList[index].poi.phone,
+                    Link: resultsList[index].poi.url,
+                };
+                //if no entry in fetch data, entry for result obj is deleted
+                if (result.Phone == undefined) {
+                    delete result.Phone;
+                }
+                if (result.Link == undefined) {
+                    delete result.Link;
+                }
+                console.log(result);
+                //preparing result obj to display entries as a readable text
+                for (const [key, value] of Object.entries(result)) {
+                    console.log(`${key}: ${value}`);
+                    //resultCard.innerText = "${key}: ${value}");
+                }
             }
-            if (result.Link == undefined) {
-                delete result.Link;
-            }
-            console.log(result);
-            //preparing result obj to display entries as a readable text
-            for (const [key, value] of Object.entries(result)) {
-                console.log(`${key}: ${value}`);
-                //resultCard.innerText = "${key}: ${value}");
-              }
-        }
-    })
+        })
 }
 
 
