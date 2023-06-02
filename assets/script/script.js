@@ -14,6 +14,7 @@ var cardContainer = document.querySelector("#card-container");
 var searchedCities = document.querySelector("#searched-cities");
 var forecast_Data = document.querySelector("#forecast-data");
 var inputDay;
+var resultsDiv = document.getElementById("results-div");
 
 
 // More variable declarations so that they can be called outside of the function in which they are gathered.
@@ -432,8 +433,10 @@ function getNearbyResults(requestURL, latitude, longitude) {
                 //preparing result obj to display entries as a readable text
                 for (const [key, value] of Object.entries(result)) {
                     console.log(`${key}: ${value}`);
-                    //resultCard.innerText = "${key}: ${value}");
+                    resultCard = `${key}: ${value}`;
+
                 }
+                resultsDiv.appendChild(resultCard);
             }
         })
 }
