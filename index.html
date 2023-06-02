@@ -51,8 +51,6 @@
 
 
 
-
-
   <div class="min-h-full">
     <nav class="bg-gray-800">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -161,15 +159,35 @@
     </div>
 </form>
 
-<div id="forecast-data"></div>
+
+
+
   
-<div>
-  <div style="width:30vw; height: 30vh;" id="mymap">This is my TomTom Map!</div>
-</div>
-<div id="results-div"></div>
+
+
+  
+  <!-- <script src="../path/to/flowbite/dist/flowbite.min.js"></script> -->
+
+  <div class="grid grid-cols-2 gap-4">
+
+    <div>
+      <div id="forecast-data"></div>
+    </div>
+
+    <div class="text-black">
+      <div>
+        <div style="width:30vw; height: 30vh;" id="mymap">This is my TomTom Map!</div>
+      </div>
+    </div>
+
+    <div class="text-black col-span-2 mymap" id="mymap">
+      <div id="results-div"></div>
+    </div>
+
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
   <script src="./assets/script/script.js"></script>
-  <!-- <script src="../path/to/flowbite/dist/flowbite.min.js"></script> -->
 </body>
 
 </html>
