@@ -150,21 +150,44 @@ var getLatLonCity = function (city) {
 };
 
 function getInput() {
-    var cityNameInput = document.getElementById("dropdown-search-city");
-    var cityName = cityNameInput.textContent;
-    console.log(cityName);
+    var cityName = document.getElementById("location-search").value;
+    var inputDate = document.getElementById("date-input");
+     var inputDay = dayjs(inputDate.value).format("M-D-YYYY");
+
+    var sandbox = document.getElementById("sandbox");
+    sandbox.textContent = inputDay;
+    if (inputDay.value != "") {
+        sandbox.textContent = inputDay;
+    } else {
+        sandbox.textContent = "lol u thought dummy"
+    }
+
+    
+    if (cityName !== "") {
+        sandbox.textContent = sandbox.textContent + cityName + "it worked dummy";
+        
+    } else {
+        sandbox.textContent = sandbox.textContent + "you suck dummy";
+    }
+return;
     // = prompt("Enter a city name");
 
     // var countryName = prompt("Enter a country name");
 
-    getLatLonCity(cityName);
+    // getLatLonCity(cityName);
 }
+var searchButton = document.getElementById("search-button");
 
-getInput();
+searchButton.addEventListener("click", getInput);
+
+
 
 var displayDay = dayjs("6-14-2023").format("M-D-YYYY");
 
 var today = dayjs().format("M-D-YYYY");
+
+
+ 
 
 var getForecast = function (latitude, longitude) {
     var fiveDayURL = "https://api.openweathermap.org/data/2.5/forecast?lat=" + latitude + "&lon=" + longitude + "&appid=44be570f60fd1ef1f012456a39e5a0ff";
@@ -173,15 +196,13 @@ var getForecast = function (latitude, longitude) {
     fetch(fiveDayURL).then(function (response) {
         response.json().then(function (forecastData) {
 
-            var promptDay = prompt("Enter a day MM-DD-YYYY");
+            // var promptDay = prompt("Enter a day MM-DD-YYYY");
 
-            var inputDay = dayjs(promptDay);
 
             var determineArrayPosition = function () {
                 if (inputDay.diff(today, "day") > 30) {
                     alert("We can't see that far into the future.  Please select a day no more than 30 days into the future.");
                     return;
-                } else if (inputDay.diff(today, "day") <= 30) {
                     var arrayPosition = inputDay.diff(today, "day");
                     return arrayPosition;
                 }
@@ -333,7 +354,7 @@ var baseURL = "https://api.tomtom.com/search/2/nearbySearch/.json?"
 // baseurl + lat=x + &lon=y + &radius=10000 (default) + &limit=10 (default, result limit) + &categoryset=numberid (restaurant id 7315) + &openingHours=nextSevenDays (display hours of business)
 // var latitude = "";
 // var longitude = "";
-var countryCode = "";
+// var countryCode = "";
 var categoryID = "";
 var radius = "&radius=10000";
 var limit = "&limit=10";
