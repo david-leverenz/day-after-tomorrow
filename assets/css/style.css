@@ -9,8 +9,8 @@
 
 .result-card{
     background-color: burlywood;
-    display: flex;
-    flex-wrap: wrap;
+    /* display: flex;
+    flex-wrap: wrap; */
     align-items: baseline;
     width: 200px;
     padding: 1rem;
@@ -21,7 +21,7 @@
     flex-direction: row;
 }
 
-.results-div{
+#results-div{
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
