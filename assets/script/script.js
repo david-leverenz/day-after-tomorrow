@@ -49,30 +49,31 @@ var forecast_Data = document.querySelector("#forecast-data");
 // };
 
 // Create a function to get the city name and iterate through the cities in storage and display them on a button on the page.
+var citiesInStorage = JSON.parse(localStorage.getItem("citySearch")) || []
 
-// var formSubmitHandler = function (event) {
-//     event.preventDefault();
+var formSubmitHandler = function (event) {
+    event.preventDefault();
 
-//     var cityName = cityInput.value.trim();
+    var cityName = cityInput.value.trim();
 
-//     if (cityName) {
+    if (cityName) {
 
-//         getLatLonCity(cityName);
-//         document.getElementById("cities").innerHTML = "";
+        getLatLonCity(cityName);
+        document.getElementById("cities").innerHTML = "";
 
-//         searchedCities.setAttribute("class", "border-top border-secondary border-3 m-3 p-2 searched-cities text-center");
+        searchedCities.setAttribute("class", "border-top border-secondary border-3 m-3 p-2 searched-cities text-center");
 
-//         for (let i = 0; i < citiesInStorage.length; i++) {
-//             var cityButton = document.createElement("button");
-//             cityButton.setAttribute("class", "btn m-1 btn-secondary align-items-center");
-//             cityButton.textContent = citiesInStorage[i];
-//             document.getElementById("cities").appendChild(cityButton);
-//         }
+        for (let i = 0; i < citiesInStorage.length; i++) {
+            var cityButton = document.createElement("button");
+            cityButton.setAttribute("class", "btn m-1 btn-secondary align-items-center");
+            cityButton.textContent = citiesInStorage[i];
+            document.getElementById("cities").appendChild(cityButton);
+        }
 
-//     } else {
-//         alert("Please enter a city name.");
-//     }
-// };
+    } else {
+        alert("Please enter a city name.");
+    }
+};
 
 
 function map(latitude, longitude){
@@ -134,6 +135,7 @@ var getLatLonCity = function (city) {
                     longitude = data[i].lon;
                     cityName = data[i].name;
 
+                    // console.log(cityName);
                     // if (!citiesInStorage.includes(cityName)) {
                     //     citiesInStorage.push(cityName);
                     //     localStorage.setItem("citySearch", JSON.stringify(citiesInStorage));
@@ -175,6 +177,19 @@ var getForecast = function (latitude, longitude) {
 
             var inputDay = dayjs(promptDay);
 
+            var foreCity = forecastData.city.name;
+
+            // console.log(foreCity);
+
+            // if (!citiesInStorage.find(function(city){
+            //     return city.name === foreCity && city.date === promptDay;
+            // })) {
+            //     citiesInStorage.push({name: foreCity, date: promptDay});
+            //     localStorage.setItem("citySearch", JSON.stringify(citiesInStorage));
+            // }
+
+            // console.log(latitude, longitude, cityName)
+
             var determineArrayPosition = function () {
                 if (inputDay.diff(today, "day") > 30) {
                     alert("We can't see that far into the future.  Please select a day no more than 30 days into the future.");
@@ -191,7 +206,7 @@ var getForecast = function (latitude, longitude) {
 
             // rowDivEl.innerHTML = "";
 
-            var foreCity = forecastData.city.name;
+
             var foreDay = dayjs().add([dayChosen], "day").format("M/D/YYYY");
             var foreIcon = forecastData.list[dayChosen].weather[0].icon;
             var foreTemp = ((((forecastData.list[dayChosen].main.temp) - 273.15) * 1.8) + 32).toFixed(2) + " F";
