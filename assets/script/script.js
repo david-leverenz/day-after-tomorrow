@@ -121,7 +121,7 @@ function map(latitude, longitude){
 // This function inserts the city into the apiURL then fetches the latitude and longitude of the city.  It checks the cities in the storage array and if the current searched city is not in the array, it adds it to the array.  If it's already in there it doesn't re-add the city to the array.  Then it runs the getWeather and getFiveDay functions.
 
 
-var getLatLonCity = function (city, country) {
+var getLatLonCity = function (city) {
 
     var apiURL = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "," + country + "&limit=1&appid=44be570f60fd1ef1f012456a39e5a0ff";
 
@@ -150,11 +150,12 @@ var getLatLonCity = function (city, country) {
 };
 
 function getInput() {
-    var cityName = prompt("Enter a city name");
+    var cityName = document.getElementById("dropdown-search-city");
+    // = prompt("Enter a city name");
 
-    var countryName = prompt("Enter a country name");
+    // var countryName = prompt("Enter a country name");
 
-    getLatLonCity(cityName, countryName);
+    getLatLonCity(cityName);
 }
 
 getInput();
