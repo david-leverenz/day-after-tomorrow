@@ -49,30 +49,31 @@ var inputDay;
 // };
 
 // Create a function to get the city name and iterate through the cities in storage and display them on a button on the page.
+var citiesInStorage = JSON.parse(localStorage.getItem("citySearch")) || []
 
-// var formSubmitHandler = function (event) {
-//     event.preventDefault();
+var formSubmitHandler = function (event) {
+    event.preventDefault();
 
-//     var cityName = cityInput.value.trim();
+    var cityName = cityInput.value.trim();
 
-//     if (cityName) {
+    if (cityName) {
 
-//         getLatLonCity(cityName);
-//         document.getElementById("cities").innerHTML = "";
+        getLatLonCity(cityName);
+        document.getElementById("cities").innerHTML = "";
 
-//         searchedCities.setAttribute("class", "border-top border-secondary border-3 m-3 p-2 searched-cities text-center");
+        searchedCities.setAttribute("class", "border-top border-secondary border-3 m-3 p-2 searched-cities text-center");
 
-//         for (let i = 0; i < citiesInStorage.length; i++) {
-//             var cityButton = document.createElement("button");
-//             cityButton.setAttribute("class", "btn m-1 btn-secondary align-items-center");
-//             cityButton.textContent = citiesInStorage[i];
-//             document.getElementById("cities").appendChild(cityButton);
-//         }
+        for (let i = 0; i < citiesInStorage.length; i++) {
+            var cityButton = document.createElement("button");
+            cityButton.setAttribute("class", "btn m-1 btn-secondary align-items-center");
+            cityButton.textContent = citiesInStorage[i];
+            document.getElementById("cities").appendChild(cityButton);
+        }
 
-//     } else {
-//         alert("Please enter a city name.");
-//     }
-// };
+    } else {
+        alert("Please enter a city name.");
+    }
+};
 
 
 function map(latitude, longitude){
@@ -135,6 +136,7 @@ var getLatLonCity = function (cityName) {
                     cityName = data[i].name;
 
                     // sandbox.textContent = longitude + latitude + "it works doofus";
+                    // console.log(cityName);
                     // if (!citiesInStorage.includes(cityName)) {
                     //     citiesInStorage.push(cityName);
                     //     localStorage.setItem("citySearch", JSON.stringify(citiesInStorage));
@@ -144,6 +146,7 @@ var getLatLonCity = function (cityName) {
 
                     getForecast(latitude, longitude);
                     map(latitude,longitude);
+                    getNearbyResults(requestURL, latitude, longitude);
                 }
             })
         }
@@ -197,7 +200,7 @@ var getForecast = function (latitude, longitude) {
 
             // rowDivEl.innerHTML = "";
 
-            var foreCity = forecastData.city.name;
+
             var foreDay = dayjs().add([dayChosen], "day").format("M/D/YYYY");
             var foreIcon = forecastData.list[dayChosen].weather[0].icon;
             var foreTemp = ((((forecastData.list[dayChosen].main.temp) - 273.15) * 1.8) + 32).toFixed(2) + " F";
@@ -338,27 +341,33 @@ var baseURL = "https://api.tomtom.com/search/2/nearbySearch/.json?"
 // var latitude = "";
 // var longitude = "";
 // var countryCode = "";
+// var countryCode = "";
 var categoryID = "";
 var radius = "&radius=10000";
 var limit = "&limit=10";
 var appid = "&key=lQzhlUqG4GkQgblg5j1RGpsNRkCl2PrN";
 
-function getNearbyResults(requestURL) {
+function getNearbyResults(requestURL, latitude, longitude) {
     //setting default to chicago for funcitonality testing
-    if (latitude == "" && longitude == "" && countryCode == "") {
-        latitude = 41.8781136;
-        longitude = -87.6297982;
-        countryCode = "US";
+
+    var tomLatitude = latitude;
+    var tomLongitude = longitude;
+  
+    // if (latitude == "" && longitude == "" && countryCode == "") {
+        // tomLatitude = 41.8781136;
+        // tomLongitude = -87.6297982;
+        // countryCode = "US";
         // alert for empty parameters
         // alert("You must enter a city and country!");
-    }
+    // }
 
-    var lat = "lat=" + latitude;
-    var lon = "&lon=" + longitude;
-    var countrySet = "&countrySet=" + countryCode;
+    var lat = "lat=" + tomLatitude;
+    var lon = "&lon=" + tomLongitude;
+    // var countrySet = "&countrySet=" + countryCode;
     var categorySet = "&categoryset=" + categoryID;
 
-    requestURL = baseURL + lat + lon + countrySet + radius + limit + appid;
+    requestURL = baseURL + lat + lon + radius + limit + appid;
+    // requestURL = baseURL + lat + lon + countrySet + radius + limit + appid;
     console.log(requestURL);
 
     if (categoryID !== "") {
@@ -411,5 +420,5 @@ function getNearbyResults(requestURL) {
         }
     })
 }
+}
 
-getNearbyResults(requestURL);
