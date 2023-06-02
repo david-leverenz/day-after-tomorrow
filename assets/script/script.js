@@ -77,6 +77,7 @@ var inputDay;
 
 
 function map(latitude, longitude) {
+    console.log(latitude, longitude);
     var API_KEY = "7ZuASDGIDYaSxAwpTaBAcI5E3Eqe7pq4";
     // var MADRID = [-3.703790, 40.416775];
     // var LISBON = [-9.1319, 38.7222];
@@ -105,16 +106,15 @@ function map(latitude, longitude) {
             moveMap(result.results[0].position)
         }
     }
+    
+submitButton.addEventListener("click", search);
 
-
-    var search = function () {
-        tt.services.fuzzySearch({
-            key: API_KEY,
-            query: document.getElementById("query").value,
-
+function search () {
+    tt.services.fuzzySearch({
+        key: API_KEY,
+        query: document.getElementById("query").value,
         }).go().then(handleResults)
     }
-
 
 }
 
@@ -409,10 +409,10 @@ function getNearbyResults(requestURL, latitude, longitude) {
             //logging entire data object, then isolating results
 
             for (let index = 0; index < resultsList.length; index++) {
-                // let resultCard = document.createElement("div");
-                // resultCard.setAttribute("class", "result-card");
-                // resultCard.setAttribute("id", "result-info" + [index]);
-                // 
+                let resultCard = document.createElement("div");
+                resultCard.setAttribute("class", "result-card");
+                resultCard.setAttribute("id", "result-info" + [index]);
+                
                 //going through result by index and retrieving relevant data and saving to object
                 let result = {
                     Name: resultsList[index].poi.name,
