@@ -420,5 +420,5 @@ function getNearbyResults(requestURL, latitude, longitude) {
         }
     })
 }
-}
+
 
