@@ -14,6 +14,8 @@ var cardContainer = document.querySelector("#card-container");
 var searchedCities = document.querySelector("#searched-cities");
 var forecast_Data = document.querySelector("#forecast-data");
 var inputDay;
+var inputDate;
+var parsedInputDay;
 
 
 // More variable declarations so that they can be called outside of the function in which they are gathered.
@@ -155,29 +157,109 @@ var getLatLonCity = function (city) {
     })
 };
 
-
-function getInputCity(event) {
-
-    event.preventDefault();
-
-    cityName = document.getElementById("location-search").value;
-    console.log(cityName);
-    getLatLonCity(cityName);
-
+// Puts values into local storage
+var loadLocalStorage = function (loadCity, loadDate) {
+    var citiesInStorage = JSON.parse(localStorage.getItem("citySearch")) || []
+    citiesInStorage.push({ searchedName: loadCity, searchedDate: loadDate });
+    localStorage.setItem("citySearch", JSON.stringify(citiesInStorage));
+    var cityArray = JSON.parse(localStorage.getItem("citySearch"));
+    
+    var recallSearch = function () {
+      
+        for (let i = 0; i < citiesInStorage.length; i++) {
+            var cityDateButton = document.createElement("button");
+    
+            var counter = cityArray[i];
+    
+            cityDateButton.textContent = counter.searchedName + " | " + counter.searchedDate;
+            document.getElementById("cities").appendChild(cityDateButton);
+    
+            cityDateButton.addEventListener("click", buttonClickHandler)
+            var buttonClickHandler = function (event) {
+                forecast_Data.innerHTML="";
+                var cityDateParse = (event.target.textContent)
+                var cityDateParseArray = cityDateParse.split(" | ");
+                let cityParse = cityDateParseArray[0];
+                let dateParse = cityDateParseArray[1];
+                console.log("City: " + cityParse);
+                console.log("Date: " + dateParse);
+                inputDay=dayjs(dateParse)
+                console.log(inputDay);
+                getLatLonCity(cityParse);
+                
+            }
+        }
+   
+         }
+        recallSearch();
 }
 
-function getInputDate(event) {
-    event.preventDefault();
+// var recallSearch = function (citiesInStorage) {
+//     for (let i = 0; i < citiesInStorage.length; i++) {
+//         var cityDateButton = document.createElement("button");
+
+//         var counter = citiesInStorage[i];
+
+//         cityDateButton.textContent = counter.searchedName + " | " + counter.searchedDate;
+//         document.getElementById("cities").appendChild(cityDateButton);
+
+//         cityDateButton.addEventListener("click", buttonClickHandler)
+//         var buttonClickHandler = function (event) {
+
+//             var cityDateParse = (event.target.textContent)
+//             var cityDateParseArray = cityDateParse.split(" | ");
+//             let cityParse = cityDateParseArray[0];
+//             let dateParse = cityDateParseArray[1];
+//             console.log("City: " + cityParse);
+//             console.log("Date: " + dateParse);
+//         }
+//     }
+// }
+
+function getInputDate() {
     var inputDate = document.getElementById("date-input");
     inputDay = dayjs(inputDate.value);
-    console.log(inputDay);
+    var parsedInputDay = dayjs(inputDay).format("MM-DD-YYYY");
 
-    return inputDay;
+    console.log(parsedInputDay);
+
+    return parsedInputDay;
 }
+
+
+function getInputCity() {
+
+
+    cityName = document.getElementById("location-search").value;
+    // console.log(cityName);
+    return cityName;
+   
+}
+
+
+function handleSubmitBtn (e){
+e.preventDefault();
+console.log(getInputDate());
+var dateData = getInputDate();
+var cityNameData = getInputCity();
+
+getLatLonCity(cityNameData);
+    
+// console.log(inputDay);
+loadLocalStorage(cityNameData, dateData);
+}
+
 var submitButton = document.getElementById("submit-button");
 
-submitButton.addEventListener("click", getInputCity);
-submitButton.addEventListener("click", getInputDate);
+// submitButton.addEventListener("click", getInputCity);
+// submitButton.addEventListener("click", getInputDate);
+submitButton.addEventListener("click", handleSubmitBtn);
+
+
+
+
+
+
 
 
 
@@ -188,7 +270,7 @@ var today = dayjs().format("M-D-YYYY");
 
 
 function determineArrayPosition() {
-    console.log(inputDay, typeof(inputDay));
+    // console.log(inputDay, typeof(inputDay));
     if (inputDay.diff(today, "day") > 30) {
         alert("We can't see that far into the future.  Please select a day no more than 30 days into the future.");
         return;
@@ -203,7 +285,8 @@ var getForecast = function (latitude, longitude) {
 
 
     fetch(fiveDayURL).then(function (response) {
-        response.json().then(function (forecastData) {
+        return response.json()})
+        .then(function (forecastData) {
             // var inputDate = document.getElementById("date-input");
             // inputDay = dayjs(inputDate.value).format("M-D-YYYY");
             // var promptDay = prompt("Enter a day MM-DD-YYYY");
@@ -330,9 +413,9 @@ var getForecast = function (latitude, longitude) {
             cardEl.appendChild(sunsetEl);
             foreList.appendChild(cardEl);
             rowDivEl.appendChild(foreList);
-            forecast_Data.append(rowDivEl);
+            forecast_Data.appendChild(rowDivEl);
         })
-    });
+    
 }
 
 // This adds event listeners on my buttons so that they do something.
