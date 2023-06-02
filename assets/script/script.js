@@ -411,7 +411,7 @@ function getNearbyResults(requestURL, latitude, longitude) {
 
             for (let index = 0; index < resultsList.length; index++) {
                 let resultCard = document.createElement("div");
-                resultCard.setAttribute("class", "result-card card");
+                resultCard.setAttribute("class", "result-card");
                 resultCard.setAttribute("id", "result-info" + [index]);
                 
                 //going through result by index and retrieving relevant data and saving to object
@@ -433,13 +433,12 @@ function getNearbyResults(requestURL, latitude, longitude) {
                 //preparing result obj to display entries as a readable text
                 for (const [key, value] of Object.entries(result)) {
                     console.log(`${key}: ${value}`);
-                    if (resultCard.textContent != "") {
-                        resultCard.textContent = resultCard.textContent + `${key}: ${value}`;
-                    } else {
-                        resultCard.textContent = `${key}: ${value}`;
-                    }
-                    console.log(resultCard.textContent);
+                    let resultText = document.createElement("p");
+                    resultText.textContent = `${key}: ${value}`;
+                    
+                    resultCard.appendChild(resultText);
                 }
+                console.log(resultCard.textContent);
                 resultsDiv.appendChild(resultCard);
             }
         })
