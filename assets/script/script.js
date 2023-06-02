@@ -13,7 +13,7 @@ var cityList = document.querySelector("#cities");
 var cardContainer = document.querySelector("#card-container");
 var searchedCities = document.querySelector("#searched-cities");
 var forecast_Data = document.querySelector("#forecast-data");
-
+var inputDay;
 
 
 // More variable declarations so that they can be called outside of the function in which they are gathered.
@@ -122,9 +122,9 @@ function map(latitude, longitude){
 // This function inserts the city into the apiURL then fetches the latitude and longitude of the city.  It checks the cities in the storage array and if the current searched city is not in the array, it adds it to the array.  If it's already in there it doesn't re-add the city to the array.  Then it runs the getWeather and getFiveDay functions.
 
 
-var getLatLonCity = function (city) {
+var getLatLonCity = function (cityName) {
 
-    var apiURL = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=44be570f60fd1ef1f012456a39e5a0ff";
+    var apiURL = "https://api.openweathermap.org/geo/1.0/direct?q=" + cityName + "&limit=1&appid=44be570f60fd1ef1f012456a39e5a0ff";
 
     fetch(apiURL).then(function (response) {
 
@@ -135,6 +135,7 @@ var getLatLonCity = function (city) {
                     longitude = data[i].lon;
                     cityName = data[i].name;
 
+                    // sandbox.textContent = longitude + latitude + "it works doofus";
                     // console.log(cityName);
                     // if (!citiesInStorage.includes(cityName)) {
                     //     citiesInStorage.push(cityName);
@@ -150,21 +151,28 @@ var getLatLonCity = function (city) {
             })
         }
     })
-    function getInput() {
-        var cityName = document.getElementById("location-search").textContent;
-        console.log(cityName);
-        
-        getLatLonCity(cityName);
-    }
+};
 
-    var submitButton=document.getElementById("submit-button");
-    submitButton.addEventListener("click", getInput);
+function getInput() {
+    var cityName = document.getElementById("location-search").value;
+    var inputDate = document.getElementById("date-input");
+    inputDay = dayjs(inputDate.value).format("M-D-YYYY");
 
-getInput();
+    getLatLonCity(cityName);
+
+}
+var searchButton = document.getElementById("search-button");
+
+searchButton.addEventListener("click", getInput);
+
+
 
 var displayDay = dayjs("6-14-2023").format("M-D-YYYY");
 
 var today = dayjs().format("M-D-YYYY");
+
+
+ 
 
 var getForecast = function (latitude, longitude) {
     var fiveDayURL = "https://api.openweathermap.org/data/2.5/forecast?lat=" + latitude + "&lon=" + longitude + "&appid=44be570f60fd1ef1f012456a39e5a0ff";
@@ -172,29 +180,15 @@ var getForecast = function (latitude, longitude) {
 
     fetch(fiveDayURL).then(function (response) {
         response.json().then(function (forecastData) {
+            var inputDate = document.getElementById("date-input");
+            inputDay = dayjs(inputDate.value).format("M-D-YYYY");
+            // var promptDay = prompt("Enter a day MM-DD-YYYY");
 
-            var promptDay = prompt("Enter a day MM-DD-YYYY");
-
-            var inputDay = dayjs(promptDay);
-
-            var foreCity = forecastData.city.name;
-
-            // console.log(foreCity);
-
-            // if (!citiesInStorage.find(function(city){
-            //     return city.name === foreCity && city.date === promptDay;
-            // })) {
-            //     citiesInStorage.push({name: foreCity, date: promptDay});
-            //     localStorage.setItem("citySearch", JSON.stringify(citiesInStorage));
-            // }
-
-            // console.log(latitude, longitude, cityName)
 
             var determineArrayPosition = function () {
                 if (inputDay.diff(today, "day") > 30) {
                     alert("We can't see that far into the future.  Please select a day no more than 30 days into the future.");
                     return;
-                } else if (inputDay.diff(today, "day") <= 30) {
                     var arrayPosition = inputDay.diff(today, "day");
                     return arrayPosition;
                 }
@@ -347,6 +341,7 @@ var baseURL = "https://api.tomtom.com/search/2/nearbySearch/.json?"
 // var latitude = "";
 // var longitude = "";
 // var countryCode = "";
+// var countryCode = "";
 var categoryID = "";
 var radius = "&radius=10000";
 var limit = "&limit=10";
@@ -425,5 +420,5 @@ function getNearbyResults(requestURL, latitude, longitude) {
         }
     })
 }
-}
+
 
