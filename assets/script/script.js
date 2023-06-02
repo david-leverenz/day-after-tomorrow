@@ -150,15 +150,15 @@ var getLatLonCity = function (city) {
             })
         }
     })
-};
+    function getInput() {
+        var cityName = document.getElementById("location-search").textContent;
+        console.log(cityName);
+        
+        getLatLonCity(cityName);
+    }
 
-function getInput() {
-    var cityName = prompt("Enter a city name");
-
-    // var countryName = prompt("Enter a country name");
-
-    getLatLonCity(cityName);
-}
+    var submitButton=document.getElementById("submit-button");
+    submitButton.addEventListener("click", getInput);
 
 getInput();
 
@@ -424,5 +424,6 @@ function getNearbyResults(requestURL, latitude, longitude) {
               }
         }
     })
+}
 }
 
