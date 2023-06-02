@@ -134,7 +134,7 @@ var getLatLonCity = function (cityName) {
                     longitude = data[i].lon;
                     cityName = data[i].name;
 
-                    sandbox.textContent = longitude + latitude + "it works doofus";
+                    // sandbox.textContent = longitude + latitude + "it works doofus";
                     // if (!citiesInStorage.includes(cityName)) {
                     //     citiesInStorage.push(cityName);
                     //     localStorage.setItem("citySearch", JSON.stringify(citiesInStorage));
