@@ -13,7 +13,7 @@ var cityList = document.querySelector("#cities");
 var cardContainer = document.querySelector("#card-container");
 var searchedCities = document.querySelector("#searched-cities");
 var forecast_Data = document.querySelector("#forecast-data");
-
+var inputDay;
 
 
 // More variable declarations so that they can be called outside of the function in which they are gathered.
@@ -153,29 +153,10 @@ var getLatLonCity = function (cityName) {
 function getInput() {
     var cityName = document.getElementById("location-search").value;
     var inputDate = document.getElementById("date-input");
-     var inputDay = dayjs(inputDate.value).format("M-D-YYYY");
-
-    var sandbox = document.getElementById("sandbox");
-    sandbox.textContent = inputDay;
-    if (inputDay.value != "") {
-        sandbox.textContent = inputDay;
-    } else {
-        sandbox.textContent = "lol u thought dummy"
-    }
-
-    
-    if (cityName !== "") {
-        sandbox.textContent = sandbox.textContent + cityName + "it worked dummy";
-        
-    } else {
-        sandbox.textContent = sandbox.textContent + "you suck dummy";
-    }
-
-    // = prompt("Enter a city name");
-
-    // var countryName = prompt("Enter a country name");
+    inputDay = dayjs(inputDate.value).format("M-D-YYYY");
 
     getLatLonCity(cityName);
+
 }
 var searchButton = document.getElementById("search-button");
 
@@ -197,7 +178,7 @@ var getForecast = function (latitude, longitude) {
     fetch(fiveDayURL).then(function (response) {
         response.json().then(function (forecastData) {
             var inputDate = document.getElementById("date-input");
-            var inputDay = dayjs(inputDate.value).format("M-D-YYYY");
+            inputDay = dayjs(inputDate.value).format("M-D-YYYY");
             // var promptDay = prompt("Enter a day MM-DD-YYYY");
 
 
