@@ -49,30 +49,31 @@ var forecast_Data = document.querySelector("#forecast-data");
 // };
 
 // Create a function to get the city name and iterate through the cities in storage and display them on a button on the page.
+var citiesInStorage = JSON.parse(localStorage.getItem("citySearch")) || []
 
-// var formSubmitHandler = function (event) {
-//     event.preventDefault();
+var formSubmitHandler = function (event) {
+    event.preventDefault();
 
-//     var cityName = cityInput.value.trim();
+    var cityName = cityInput.value.trim();
 
-//     if (cityName) {
+    if (cityName) {
 
-//         getLatLonCity(cityName);
-//         document.getElementById("cities").innerHTML = "";
+        getLatLonCity(cityName);
+        document.getElementById("cities").innerHTML = "";
 
-//         searchedCities.setAttribute("class", "border-top border-secondary border-3 m-3 p-2 searched-cities text-center");
+        searchedCities.setAttribute("class", "border-top border-secondary border-3 m-3 p-2 searched-cities text-center");
 
-//         for (let i = 0; i < citiesInStorage.length; i++) {
-//             var cityButton = document.createElement("button");
-//             cityButton.setAttribute("class", "btn m-1 btn-secondary align-items-center");
-//             cityButton.textContent = citiesInStorage[i];
-//             document.getElementById("cities").appendChild(cityButton);
-//         }
+        for (let i = 0; i < citiesInStorage.length; i++) {
+            var cityButton = document.createElement("button");
+            cityButton.setAttribute("class", "btn m-1 btn-secondary align-items-center");
+            cityButton.textContent = citiesInStorage[i];
+            document.getElementById("cities").appendChild(cityButton);
+        }
 
-//     } else {
-//         alert("Please enter a city name.");
-//     }
-// };
+    } else {
+        alert("Please enter a city name.");
+    }
+};
 
 
 function map(latitude, longitude){
@@ -123,7 +124,7 @@ function map(latitude, longitude){
 
 var getLatLonCity = function (city) {
 
-    var apiURL = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "," + country + "&limit=1&appid=44be570f60fd1ef1f012456a39e5a0ff";
+    var apiURL = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=44be570f60fd1ef1f012456a39e5a0ff";
 
     fetch(apiURL).then(function (response) {
 
@@ -134,6 +135,7 @@ var getLatLonCity = function (city) {
                     longitude = data[i].lon;
                     cityName = data[i].name;
 
+                    // console.log(cityName);
                     // if (!citiesInStorage.includes(cityName)) {
                     //     citiesInStorage.push(cityName);
                     //     localStorage.setItem("citySearch", JSON.stringify(citiesInStorage));
@@ -143,6 +145,7 @@ var getLatLonCity = function (city) {
 
                     getForecast(latitude, longitude);
                     map(latitude,longitude);
+                    getNearbyResults(requestURL, latitude, longitude);
                 }
             })
         }
@@ -175,6 +178,19 @@ var getForecast = function (latitude, longitude) {
 
             var inputDay = dayjs(promptDay);
 
+            var foreCity = forecastData.city.name;
+
+            // console.log(foreCity);
+
+            // if (!citiesInStorage.find(function(city){
+            //     return city.name === foreCity && city.date === promptDay;
+            // })) {
+            //     citiesInStorage.push({name: foreCity, date: promptDay});
+            //     localStorage.setItem("citySearch", JSON.stringify(citiesInStorage));
+            // }
+
+            // console.log(latitude, longitude, cityName)
+
             var determineArrayPosition = function () {
                 if (inputDay.diff(today, "day") > 30) {
                     alert("We can't see that far into the future.  Please select a day no more than 30 days into the future.");
@@ -191,7 +207,7 @@ var getForecast = function (latitude, longitude) {
 
             // rowDivEl.innerHTML = "";
 
-            var foreCity = forecastData.city.name;
+
             var foreDay = dayjs().add([dayChosen], "day").format("M/D/YYYY");
             var foreIcon = forecastData.list[dayChosen].weather[0].icon;
             var foreTemp = ((((forecastData.list[dayChosen].main.temp) - 273.15) * 1.8) + 32).toFixed(2) + " F";
@@ -313,3 +329,101 @@ var getForecast = function (latitude, longitude) {
 
 // submitEl.addEventListener("submit", formSubmitHandler);
 // cityList.addEventListener("click", buttonClickHandler);
+
+// Here are some notes for tomtomapi
+
+//pseudo-code:
+//
+//save btn - add save local storage event of fave places.
+//basic info for each result name/phone/address/category/url
+//address url links, location (address), categories-relevant data hotels, food, 
+//append data to card in html
+//dynamically create card within set limit in fetch req data obj output
+//
+
+var requestURL = "https://api.tomtom.com/search/2/nearbySearch/.json?lat=41.8781136&lon=-87.6297982&radius=10000&key=lQzhlUqG4GkQgblg5j1RGpsNRkCl2PrN";
+
+var baseURL = "https://api.tomtom.com/search/2/nearbySearch/.json?"
+// baseurl + lat=x + &lon=y + &radius=10000 (default) + &limit=10 (default, result limit) + &categoryset=numberid (restaurant id 7315) + &openingHours=nextSevenDays (display hours of business)
+// var latitude = "";
+// var longitude = "";
+// var countryCode = "";
+var categoryID = "";
+var radius = "&radius=10000";
+var limit = "&limit=10";
+var appid = "&key=lQzhlUqG4GkQgblg5j1RGpsNRkCl2PrN";
+
+function getNearbyResults(requestURL, latitude, longitude) {
+    //setting default to chicago for funcitonality testing
+
+    var tomLatitude = latitude;
+    var tomLongitude = longitude;
+  
+    // if (latitude == "" && longitude == "" && countryCode == "") {
+        // tomLatitude = 41.8781136;
+        // tomLongitude = -87.6297982;
+        // countryCode = "US";
+        // alert for empty parameters
+        // alert("You must enter a city and country!");
+    // }
+
+    var lat = "lat=" + tomLatitude;
+    var lon = "&lon=" + tomLongitude;
+    // var countrySet = "&countrySet=" + countryCode;
+    var categorySet = "&categoryset=" + categoryID;
+
+    requestURL = baseURL + lat + lon + radius + limit + appid;
+    // requestURL = baseURL + lat + lon + countrySet + radius + limit + appid;
+    console.log(requestURL);
+
+    if (categoryID !== "") {
+        requestURL + categorySet;
+    }
+
+    fetch(requestURL)
+    .then(function (response) {
+        console.log(response);
+
+        if (response.status === 200) {
+            console.log("working");
+        } else {
+            console.log("try again loser");
+        }
+        return response.json();
+    })
+    .then(function (data){
+        console.log(data);
+        let resultsList = data.results;
+        console.log(resultsList);
+        //logging entire data object, then isolating results
+
+        for (let  index = 0; index < resultsList.length; index++) {
+            // let resultCard = document.createElement("div");
+            // resultCard.setAttribute("class", "result-card");
+            // resultCard.setAttribute("id", "result-info" + [index]);
+            // 
+            //going through result by index and retrieving relevant data and saving to object
+            let result = {
+                Name: resultsList[index].poi.name,
+                Address: resultsList[index].address.freeformAddress,
+                Categories: resultsList[index].poi.categories.join(),
+                Phone: resultsList[index].poi.phone,
+                Link: resultsList[index].poi.url,
+            };
+            //if no entry in fetch data, entry for result obj is deleted
+            if (result.Phone == undefined) {
+                delete result.Phone;
+            }
+            if (result.Link == undefined) {
+                delete result.Link;
+            }
+            console.log(result);
+            //preparing result obj to display entries as a readable text
+            for (const [key, value] of Object.entries(result)) {
+                console.log(`${key}: ${value}`);
+                //resultCard.innerText = "${key}: ${value}");
+              }
+        }
+    })
+}
+
