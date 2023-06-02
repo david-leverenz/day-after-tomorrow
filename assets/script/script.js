@@ -121,9 +121,9 @@ function map(latitude, longitude){
 // This function inserts the city into the apiURL then fetches the latitude and longitude of the city.  It checks the cities in the storage array and if the current searched city is not in the array, it adds it to the array.  If it's already in there it doesn't re-add the city to the array.  Then it runs the getWeather and getFiveDay functions.
 
 
-var getLatLonCity = function (city) {
+var getLatLonCity = function (cityName) {
 
-    var apiURL = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "," + country + "&limit=1&appid=44be570f60fd1ef1f012456a39e5a0ff";
+    var apiURL = "https://api.openweathermap.org/geo/1.0/direct?q=" + cityName + "&limit=1&appid=44be570f60fd1ef1f012456a39e5a0ff";
 
     fetch(apiURL).then(function (response) {
 
@@ -134,6 +134,7 @@ var getLatLonCity = function (city) {
                     longitude = data[i].lon;
                     cityName = data[i].name;
 
+                    sandbox.textContent = longitude + latitude + "it works doofus";
                     // if (!citiesInStorage.includes(cityName)) {
                     //     citiesInStorage.push(cityName);
                     //     localStorage.setItem("citySearch", JSON.stringify(citiesInStorage));
@@ -169,12 +170,12 @@ function getInput() {
     } else {
         sandbox.textContent = sandbox.textContent + "you suck dummy";
     }
-return;
+
     // = prompt("Enter a city name");
 
     // var countryName = prompt("Enter a country name");
 
-    // getLatLonCity(cityName);
+    getLatLonCity(cityName);
 }
 var searchButton = document.getElementById("search-button");
 
@@ -195,7 +196,8 @@ var getForecast = function (latitude, longitude) {
 
     fetch(fiveDayURL).then(function (response) {
         response.json().then(function (forecastData) {
-
+            var inputDate = document.getElementById("date-input");
+            var inputDay = dayjs(inputDate.value).format("M-D-YYYY");
             // var promptDay = prompt("Enter a day MM-DD-YYYY");
 
 
