@@ -2,6 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+.card{
+    background-color: bisque;
+    
+}
 
+.result-card{
+    background-color: burlywood;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    width: 200px;
+    padding: 1rem;
+    margin: 1rem;
+    border-radius: 5%;
+    border: 3px solid brown;
+    font-size: 14px;
+    flex-direction: row;
+}
 
-
+.results-div{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-items: center;
+} 
