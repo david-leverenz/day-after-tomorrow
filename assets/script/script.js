@@ -93,6 +93,7 @@ var loadLocalStorage = function (loadCity, loadDate) {
     
             cityDateButton.textContent = counter.searchedName + " | " + counter.searchedDate;
             document.getElementById("cities").appendChild(cityDateButton);
+            cityDateButton.setAttribute("class", "bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded text-base");
     
             cityDateButton.addEventListener("click", buttonClickHandler)
             var buttonClickHandler = function (event) {
