@@ -1,5 +1,3 @@
-// Create the variables I plan to use.
-
 var submitEl = document.querySelector("#submit-form");
 var cityInput = document.querySelector("#search-input");
 var cityTitle = document.querySelector("#city");
@@ -19,66 +17,6 @@ var parsedInputDay;
 var resultsDiv = document.getElementById("results-div");
 
 
-// More variable declarations so that they can be called outside of the function in which they are gathered.
-
-// var latitude = "string";
-// var longitude = "string";
-// var cityName = "string";
-
-// Create a function to get the city name and iterate through the cities in storage and display them on a button on the page.
-
-// var formSubmitHandler = function (event) {
-//     event.preventDefault();
-
-//     var cityName = cityInput.value.trim();
-
-//     if (cityName) {
-
-//         getLatLonCity(cityName);
-//         document.getElementById("cities").innerHTML = "";
-
-//         searchedCities.setAttribute("class", "border-top border-secondary border-3 m-3 p-2 searched-cities text-center");
-
-//         for (let i = 0; i < citiesInStorage.length; i++) {
-//             var cityButton = document.createElement("button");
-//             cityButton.setAttribute("class", "btn m-1 btn-secondary align-items-center");
-//             cityButton.textContent = citiesInStorage[i];
-//             document.getElementById("cities").appendChild(cityButton);
-//         }
-
-//     } else {
-//         alert("Please enter a city name.");
-//     }
-// };
-
-// Create a function to get the city name and iterate through the cities in storage and display them on a button on the page.
-// var citiesInStorage = JSON.parse(localStorage.getItem("citySearch")) || []
-
-// var formSubmitHandler = function (event) {
-//     event.preventDefault();
-
-//     var cityName = cityInput.value.trim();
-
-//     if (cityName) {
-
-//         getLatLonCity(cityName);
-//         document.getElementById("cities").innerHTML = "";
-
-//         searchedCities.setAttribute("class", "border-top border-secondary border-3 m-3 p-2 searched-cities text-center");
-
-//         for (let i = 0; i < citiesInStorage.length; i++) {
-//             var cityButton = document.createElement("button");
-//             cityButton.setAttribute("class", "btn m-1 btn-secondary align-items-center");
-//             cityButton.textContent = citiesInStorage[i];
-//             document.getElementById("cities").appendChild(cityButton);
-//         }
-
-//     } else {
-//         alert("Please enter a city name.");
-//     }
-// };
-
-
 function map(latitude, longitude) {
     console.log(latitude, longitude);
     var API_KEY = "7ZuASDGIDYaSxAwpTaBAcI5E3Eqe7pq4";
@@ -94,15 +32,6 @@ function map(latitude, longitude) {
         container: 'mymap',
     });
 
-
-    // var moveMap = function(lnglat) {
-    // 	map.flyTo({
-    // 		center: lnglat,
-    // 		zoom: 14
-    // 	})
-    // }
-
-
     var handleResults = function (result) {
         console.log(result);
         if (result.results) {
@@ -112,13 +41,12 @@ function map(latitude, longitude) {
     
 submitButton.addEventListener("click", search);
 
-function search () {
-    tt.services.fuzzySearch({
-        key: API_KEY,
-        query: document.getElementById("query").value,
-        }).go().then(handleResults)
+    function search () {
+        tt.services.fuzzySearch({
+            key: API_KEY,
+            query: document.getElementById("query").value,
+            }).go().then(handleResults)
     }
-
 }
 
 
@@ -139,15 +67,6 @@ var getLatLonCity = function (city) {
                     latitude = data[i].lat;
                     longitude = data[i].lon;
                     cityName = data[i].name;
-
-                    // sandbox.textContent = longitude + latitude + "it works doofus";
-                    // console.log(cityName);
-                    // if (!citiesInStorage.includes(cityName)) {
-                    //     citiesInStorage.push(cityName);
-                    //     localStorage.setItem("citySearch", JSON.stringify(citiesInStorage));
-                    // }
-
-                    // console.log(latitude, longitude, cityName)
 
                     getForecast(latitude, longitude);
                     map(latitude, longitude);
@@ -187,91 +106,47 @@ var loadLocalStorage = function (loadCity, loadDate) {
                 inputDay=dayjs(dateParse)
                 console.log(inputDay);
                 getLatLonCity(cityParse);
-                
             }
         }
    
-         }
-        recallSearch();
+    }
+    recallSearch();
 }
 
-// var recallSearch = function (citiesInStorage) {
-//     for (let i = 0; i < citiesInStorage.length; i++) {
-//         var cityDateButton = document.createElement("button");
-
-//         var counter = citiesInStorage[i];
-
-//         cityDateButton.textContent = counter.searchedName + " | " + counter.searchedDate;
-//         document.getElementById("cities").appendChild(cityDateButton);
-
-//         cityDateButton.addEventListener("click", buttonClickHandler)
-//         var buttonClickHandler = function (event) {
-
-//             var cityDateParse = (event.target.textContent)
-//             var cityDateParseArray = cityDateParse.split(" | ");
-//             let cityParse = cityDateParseArray[0];
-//             let dateParse = cityDateParseArray[1];
-//             console.log("City: " + cityParse);
-//             console.log("Date: " + dateParse);
-//         }
-//     }
-// }
 
 function getInputDate() {
     var inputDate = document.getElementById("date-input");
     inputDay = dayjs(inputDate.value);
     var parsedInputDay = dayjs(inputDay).format("MM-DD-YYYY");
 
-    console.log(parsedInputDay);
-
     return parsedInputDay;
 }
 
 
 function getInputCity() {
-
-
     cityName = document.getElementById("location-search").value;
-    // console.log(cityName);
-    return cityName;
-   
+    return cityName; 
 }
 
 
 function handleSubmitBtn (e){
-e.preventDefault();
-console.log(getInputDate());
-var dateData = getInputDate();
-var cityNameData = getInputCity();
+    e.preventDefault();
+    console.log(getInputDate());
+    var dateData = getInputDate();
+    var cityNameData = getInputCity();
 
-getLatLonCity(cityNameData);
-    
-// console.log(inputDay);
-loadLocalStorage(cityNameData, dateData);
+    getLatLonCity(cityNameData);
+
+    loadLocalStorage(cityNameData, dateData);
 }
 
 var submitButton = document.getElementById("submit-button");
-
-// submitButton.addEventListener("click", getInputCity);
-// submitButton.addEventListener("click", getInputDate);
 submitButton.addEventListener("click", handleSubmitBtn);
 
-
-
-
-
-
-
-
-
 var displayDay = dayjs("6-14-2023").format("M-D-YYYY");
-
 var today = dayjs().format("M-D-YYYY");
 
-
-
 function determineArrayPosition() {
-    // console.log(inputDay, typeof(inputDay));
     if (inputDay.diff(today, "day") > 30) {
         alert("We can't see that far into the future.  Please select a day no more than 30 days into the future.");
         return;
@@ -288,18 +163,8 @@ var getForecast = function (latitude, longitude) {
     fetch(fiveDayURL).then(function (response) {
         return response.json()})
         .then(function (forecastData) {
-            // var inputDate = document.getElementById("date-input");
-            // inputDay = dayjs(inputDate.value).format("M-D-YYYY");
-            // var promptDay = prompt("Enter a day MM-DD-YYYY");
-
-
 
             var dayChosen = determineArrayPosition();
-
-            console.log(dayChosen);
-
-            // rowDivEl.innerHTML = "";
-
 
             var foreDay = dayjs().add([dayChosen], "day").format("M/D/YYYY");
             var foreIcon = forecastData.list[dayChosen].weather[0].icon;
@@ -346,10 +211,6 @@ var getForecast = function (latitude, longitude) {
             var sunset12Format = twelveHour + ":" + fullSunsetMinutes + " " + setAmpm
 
             rainProbability = foreRain * 100;
-
-            // var weatherList = "Day: " + foreDay + "\n" + "City: " + foreCity + "\n" + "Country: " + foreCountry + "\n" + "Timezone: " + timezoneFormatted + "\n" + "Weather icon:  " + foreIcon + "\n" + "Temp: " + foreTemp + "\n" + "Feels like: " + foreFeels + "\n" + "Wind: " + foreWind + "\n" + "Humidity: " + foreHumidity + "\n" + "Cloudiness:" + foreClouds + "%, " + "\n" + "Rain probability: " + rainProbability + "%" + "\n" + "Sunrise: " + sunrise12Format + "\n" + "Sunset: " + sunset12Format;
-
-            // console.log(weatherList);
 
             var rowDivEl = document.createElement("div");
 
@@ -416,44 +277,22 @@ var getForecast = function (latitude, longitude) {
             rowDivEl.appendChild(foreList);
             forecast_Data.appendChild(rowDivEl);
         })
-    
 }
 
-// This adds event listeners on my buttons so that they do something.
-
-// submitEl.addEventListener("submit", formSubmitHandler);
-// cityList.addEventListener("click", buttonClickHandler);
-
-// Here are some notes for tomtomapi
-
-//pseudo-code:
-//
-//save btn - add save local storage event of fave places.
-//basic info for each result name/phone/address/category/url
-//address url links, location (address), categories-relevant data hotels, food, 
-//append data to card in html
-//dynamically create card within set limit in fetch req data obj output
-//
 
 var requestURL = "https://api.tomtom.com/search/2/nearbySearch/.json?lat=41.8781136&lon=-87.6297982&radius=10000&key=lQzhlUqG4GkQgblg5j1RGpsNRkCl2PrN";
 
 var baseURL = "https://api.tomtom.com/search/2/nearbySearch/.json?"
-// baseurl + lat=x + &lon=y + &radius=10000 (default) + &limit=10 (default, result limit) + &categoryset=numberid (restaurant id 7315) + &openingHours=nextSevenDays (display hours of business)
-// var latitude = "";
-// var longitude = "";
-// var countryCode = "";
-// var countryCode = "";
 var categoryID = "";
 var radius = "&radius=10000";
 var limit = "&limit=10";
 var appid = "&key=lQzhlUqG4GkQgblg5j1RGpsNRkCl2PrN";
 
 function getNearbyResults(requestURL, latitude, longitude) {
-    //setting default to chicago for funcitonality testing
 
     var tomLatitude = latitude;
     var tomLongitude = longitude;
-
+    //setting default to chicago for funcitonality testing
     // if (latitude == "" && longitude == "" && countryCode == "") {
     // tomLatitude = 41.8781136;
     // tomLongitude = -87.6297982;
@@ -464,11 +303,9 @@ function getNearbyResults(requestURL, latitude, longitude) {
 
     var lat = "lat=" + tomLatitude;
     var lon = "&lon=" + tomLongitude;
-    // var countrySet = "&countrySet=" + countryCode;
     var categorySet = "&categoryset=" + categoryID;
 
     requestURL = baseURL + lat + lon + radius + limit + appid;
-    // requestURL = baseURL + lat + lon + countrySet + radius + limit + appid;
     console.log(requestURL);
 
     if (categoryID !== "") {
@@ -526,5 +363,3 @@ function getNearbyResults(requestURL, latitude, longitude) {
             }
         })
 }
-
-

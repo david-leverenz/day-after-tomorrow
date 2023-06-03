@@ -2,23 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-.card{
-    background-color: burlywood;
-    border-radius: 5%;
-    border: 3px solid brown;
-    
+* {
+    background-color: lightgoldenrodyellow;
 }
 
+.card{
+    background-color: lightgoldenrodyellow;
+    border-radius: 5%;
+    border: 5px solid black;
+}
+
+/* .map {
+    border: 3px solid red;
+    border-radius: 5%;
+} */
+
 .result-card{
-    background-color: burlywood;
-    /* display: flex;
-    flex-wrap: wrap; */
+    background-color: lightgoldenrodyellow;
     align-items: baseline;
     width: 200px;
     padding: 1rem;
     margin: 1rem;
     border-radius: 5%;
-    border: 3px solid brown;
+    border: 5px solid black;
     font-size: 14px;
     flex-direction: row;
 }
