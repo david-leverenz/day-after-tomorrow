@@ -3,7 +3,9 @@
 @tailwind utilities;
 
 .card{
-    background-color: bisque;
+    background-color: burlywood;
+    border-radius: 5%;
+    border: 3px solid brown;
     
 }
 
