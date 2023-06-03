@@ -1,43 +1,38 @@
 # Day After Tomorrow
-Simple overview of use/purpose.
+On Day After Tomorrow a person can enter any city and a date in the near future to get the forecast for that day, a map of the city and a list of some cool things to do while there.  It saves all searches and allows you to re-initiate those searches with the click of a button.<br>
 ## Description
-An in-depth paragraph about your project and overview of use.
+Our website uses the Tailwind CSS framework (a framework other than Bootstrap).<br>
+It was deployed to GitHub Pages.<br>
+It is interactive (i.e. can accept and respond to user input).<br>
+It uses two different server-side APIs (four api calls).<br>
+It still has some alerts.  We weren't able to change them to modals due to time contraints.<br>
+It uses client-side storage to store persistent data.<br>
+It is responsive.<br>
+It has a semi-polished UI that time constraints prevented from being a polished UI.<br>
+It has a clean repository that meets quality coding standards (file structure, naming conventions, follows best practices for class/id naming conventions, indentation, quality comments, etc.).<br>
+It has a quality README (with unique name, description, technologies used, screenshot (to be added after CSS changes), and link to deployed application).<br>
 ## Getting Started
+N/A<br>
 ### Dependencies
-* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-* ex. Windows 10
+N/A<br>
 ### Installing
-* How/where to download your program
-* Any modifications needed to be made to files/folders
+N/A<br>
 ### Executing program
-* How to run the program
-* Step-by-step bullets
-```
-code blocks for commands
-```
+N/A<br>
 ## Help
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
+N/A<br>
 ## Authors
-Contributors names and contact info
-ex. Dominique Pizzie  
-ex. [@DomPizzie](https://twitter.com/dompizzie)
+KT<br>
+Ilia Glazman<br>
+Karthik<br>
+David Leverenz<br>
 ## Version History
-* 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
-* 0.1
-    * Initial Release
+Version 1.0 (Initial Release)<br>
 ## License
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
+This project is licensed under the MIT License - see the LICENSE.md file for details.<br>
 ## Acknowledgments
-Inspiration, code snippets, etc.
-* [awesome-readme](https://github.com/matiassingers/awesome-readme)
-* [PurpleBooth](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
-* [dbader](https://github.com/dbader/readme-template)
-* [zenorocha](https://gist.github.com/zenorocha/4526327)
-* [fvcproductions](https://gist.github.com/fvcproductions/1bfc2d4aecb01a834b46)
-
-
+Special thanks to Poornima, who got us over the finish line and our TAs, Dom and Sam,
+ who helped us through some frustrating roadblocks.<br><br>
+* [Tailwind](https://tailwindcss.com/)
+* [OpenWeather](https://openweathermap.org/api)
+* [tomtom](https://www.tomtom.com/)
