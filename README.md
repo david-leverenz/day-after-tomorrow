@@ -22,9 +22,9 @@ N/A<br>
 ## Help
 N/A<br>
 ## Authors
-KT<br>
+KT Eddy<br>
 Ilia Glazman<br>
-Karthik<br>
+Karthik Murugappan<br>
 David Leverenz<br>
 ## Version History
 Version 1.0 (Initial Release)<br>
