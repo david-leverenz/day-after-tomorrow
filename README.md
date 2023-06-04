@@ -1,5 +1,11 @@
 # Day After Tomorrow
 On Day After Tomorrow a person can enter any city and a date in the near future to get the forecast for that day, a map of the city and a list of some cool things to do while there.  It saves all searches and allows you to re-initiate those searches with the click of a button.<br>
+## Screen Shot
+![image](https://github.com/david-leverenz/day-after-tomorrow/assets/131185593/d954949f-d682-4696-bb3c-f80501cc7994)
+
+## Links
+
+
 ## Description
 Our website uses the Tailwind CSS framework (a framework other than Bootstrap).<br>
 It was deployed to GitHub Pages.<br>
