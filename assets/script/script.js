@@ -50,12 +50,13 @@ var loadLocalStorage = function (loadCity, loadDate) {
     var cityArray = JSON.parse(localStorage.getItem("citySearch"));
     
     var recallSearch = function () {
-      
+        forecast_Data.innerHTML="";
+        document.getElementById("cities").innerHTML=""
         for (let i = 0; i < citiesInStorage.length; i++) {
             var cityDateButton = document.createElement("button");
     
             var counter = cityArray[i];
-    
+            // document.getElementById("cities").innerHTML=""
             cityDateButton.textContent = counter.searchedName + " | " + counter.searchedDate;
             document.getElementById("cities").appendChild(cityDateButton);
             cityDateButton.setAttribute("class", "bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded text-base");
