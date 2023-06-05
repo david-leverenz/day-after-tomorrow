@@ -1,82 +1,47 @@
-var submitEl = document.querySelector("#submit-form");
+//Global variables
+
+//Variables for location input, relating to html elements to on the page and how it's displayed
 var cityInput = document.querySelector("#search-input");
 var cityTitle = document.querySelector("#city");
+var cardContainer = document.querySelector("#card-container");
+
+//Variables relating to saving data to local storage
+var cityList = document.querySelector("#cities");
+var searchedCities = document.querySelector("#searched-cities");
+
+//Variables for displaying and calling specific forecast data for given location from OpenWeather API
 var currentTemp = document.querySelector("#current-temp");
 var currentWind = document.querySelector("#current-wind");
 var currentHumidity = document.querySelector("#current-humidity");
-var fiveDay = document.querySelector("#five-day");
 var weatherPicture = document.querySelector("#weather-icon");
 var forePicture = document.querySelector("#fore-icon")
-var cityList = document.querySelector("#cities");
-var cardContainer = document.querySelector("#card-container");
-var searchedCities = document.querySelector("#searched-cities");
+
+//Variables for HTML element containers to display forecast data
 var forecast_Data = document.querySelector("#forecast-data");
+var fiveDay = document.querySelector("#five-day");
+
+//Variables for the search form and search button for submit/click events
+var submitEl = document.querySelector("#submit-form");
+var submitButton = document.getElementById("submit-button");
+
+//Variables for fetching date input from search form, used across forecast functions and for saving location-date input to local storage
 var inputDay;
-var inputDate;
+var inputDate = document.getElementById("date-input");
 var parsedInputDay;
+var displayDay = dayjs("6-14-2023").format("M-D-YYYY");
+var today = dayjs().format("M-D-YYYY");
+
+//Variables relating to fetching nearby results from the TomTom API and their correlating HTML elements to display on the page
+var requestURL;
+var baseURL = "https://api.tomtom.com/search/2/nearbySearch/.json?"
+var categoryID = "";
+var radius = "&radius=10000";
+var limit = "&limit=10";
+var appid = "&key=lQzhlUqG4GkQgblg5j1RGpsNRkCl2PrN";
 var resultsDiv = document.getElementById("results-div");
 
-
-function map(latitude, longitude) {
-    console.log(latitude, longitude);
-    var API_KEY = "7ZuASDGIDYaSxAwpTaBAcI5E3Eqe7pq4";
-    // var MADRID = [-3.703790, 40.416775];
-    // var LISBON = [-9.1319, 38.7222];
-    var coordinates = [longitude, latitude];
-    console.log(coordinates);
-    var map = tt.map({
-        key: API_KEY,
-        //center: MADRID,
-        center: coordinates,
-        zoom: 10,
-        container: 'mymap',
-    });
-
-    var handleResults = function (result) {
-        console.log(result);
-        if (result.results) {
-            moveMap(result.results[0].position)
-        }
-    }
-    
-submitButton.addEventListener("click", search);
-
-    function search () {
-        tt.services.fuzzySearch({
-            key: API_KEY,
-            query: document.getElementById("query").value,
-            }).go().then(handleResults)
-    }
-}
-
-
-// This function inserts the city into the apiURL then fetches the latitude and longitude of the city.  It checks the cities in the storage array and if the current searched city is not in the array, it adds it to the array.  If it's already in there it doesn't re-add the city to the array.  Then it runs the getWeather and getFiveDay functions.
-
-
-var getLatLonCity = function (city) {
-
-    var apiURL = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=44be570f60fd1ef1f012456a39e5a0ff";
-
-    fetch(apiURL).then(function (response) {
-
-        if (response.ok) {
-            response.json().then(function (data) {
-                console.log(data);
-
-                for (var i = 0; i < data.length; i++) {
-                    latitude = data[i].lat;
-                    longitude = data[i].lon;
-                    cityName = data[i].name;
-
-                    getForecast(latitude, longitude);
-                    map(latitude, longitude);
-                    getNearbyResults(requestURL, latitude, longitude);
-                }
-            })
-        }
-    })
-};
-
+//Functions
+//Functions that are declared as variables to improve efficiency and organization of script code.
 // Puts values into local storage
 var loadLocalStorage = function (loadCity, loadDate) {
     var citiesInStorage = JSON.parse(localStorage.getItem("citySearch")) || []
@@ -102,10 +67,7 @@ var loadLocalStorage = function (loadCity, loadDate) {
                 var cityDateParseArray = cityDateParse.split(" | ");
                 let cityParse = cityDateParseArray[0];
                 let dateParse = cityDateParseArray[1];
-                console.log("City: " + cityParse);
-                console.log("Date: " + dateParse);
                 inputDay=dayjs(dateParse)
-                console.log(inputDay);
                 getLatLonCity(cityParse);
             }
         }
@@ -114,49 +76,31 @@ var loadLocalStorage = function (loadCity, loadDate) {
     recallSearch();
 }
 
+// This function inserts the city into the apiURL then fetches the latitude and longitude of the city.  It checks the cities in the storage array and if the current searched city is not in the array, it adds it to the array.  If it's already in there it doesn't re-add the city to the array.  Then it runs the getWeather and getFiveDay functions.
+var getLatLonCity = function (city) {
 
-function getInputDate() {
-    var inputDate = document.getElementById("date-input");
-    inputDay = dayjs(inputDate.value);
-    var parsedInputDay = dayjs(inputDay).format("MM-DD-YYYY");
+    var apiURL = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=44be570f60fd1ef1f012456a39e5a0ff";
 
-    return parsedInputDay;
-}
+    fetch(apiURL).then(function (response) {
 
+        if (response.ok) {
+            response.json().then(function (data) {
 
-function getInputCity() {
-    cityName = document.getElementById("location-search").value;
-    return cityName; 
-}
+                for (var i = 0; i < data.length; i++) {
+                    latitude = data[i].lat;
+                    longitude = data[i].lon;
+                    cityName = data[i].name;
 
-
-function handleSubmitBtn (e){
-    e.preventDefault();
-    console.log(getInputDate());
-    var dateData = getInputDate();
-    var cityNameData = getInputCity();
-
-    getLatLonCity(cityNameData);
-
-    loadLocalStorage(cityNameData, dateData);
-}
-
-var submitButton = document.getElementById("submit-button");
-submitButton.addEventListener("click", handleSubmitBtn);
-
-var displayDay = dayjs("6-14-2023").format("M-D-YYYY");
-var today = dayjs().format("M-D-YYYY");
-
-function determineArrayPosition() {
-    if (inputDay.diff(today, "day") > 30) {
-        alert("We can't see that far into the future.  Please select a day no more than 30 days into the future.");
-        return;
-    } else {
-        var arrayPosition = inputDay.diff(today, "day");
-        return arrayPosition;
-    }
+                    getForecast(latitude, longitude);
+                    map(latitude, longitude);
+                    getNearbyResults(requestURL, latitude, longitude);
+                }
+            })
+        }
+    })
 };
 
+//This function retrieves relevant forecast data from the OpenWeather API with the coordinates fetched from the getLatLonCity function and the date from user input.  Once the specific forecast data is retrieved, it is appended to the relating HTML elements and their container to display onto the page.
 var getForecast = function (latitude, longitude) {
     var fiveDayURL = "https://api.openweathermap.org/data/2.5/forecast?lat=" + latitude + "&lon=" + longitude + "&appid=44be570f60fd1ef1f012456a39e5a0ff";
 
@@ -280,62 +224,103 @@ var getForecast = function (latitude, longitude) {
         })
 }
 
+//Functions that can be called asynchronously
+//Functions for user input for location and date
+function getInputDate() {
+    inputDay = dayjs(inputDate.value);
+    parsedInputDay = dayjs(inputDay).format("MM-DD-YYYY");
 
-var requestURL = "https://api.tomtom.com/search/2/nearbySearch/.json?lat=41.8781136&lon=-87.6297982&radius=10000&key=lQzhlUqG4GkQgblg5j1RGpsNRkCl2PrN";
+    return parsedInputDay;
+}
 
-var baseURL = "https://api.tomtom.com/search/2/nearbySearch/.json?"
-var categoryID = "";
-var radius = "&radius=10000";
-var limit = "&limit=10";
-var appid = "&key=lQzhlUqG4GkQgblg5j1RGpsNRkCl2PrN";
 
+function getInputCity() {
+    cityName = document.getElementById("location-search").value;
+    return cityName; 
+}
+
+//This function calls the previous functions to consolidate the user location and date input so it can be used in conjunction for saving to local storage and retrieving forecast data.
+function handleSubmitBtn (e){
+    e.preventDefault();
+    var dateData = getInputDate();
+    var cityNameData = getInputCity();
+
+    getLatLonCity(cityNameData);
+
+    loadLocalStorage(cityNameData, dateData);
+}
+
+//This function is used as a cap by determining the user input date against an array of dates 30 days from the current day and alerts if a user tries to input a date and retrieve data that is outside of the OpenWeather API's database.  (As well as science, since it is highly unlikely that accurrate forecast predictions can be made over 30 days into the future.)
+function determineArrayPosition() {
+    if (inputDay.diff(today, "day") > 30) {
+
+        alert("We can't see that far into the future.  Please select a day no more than 30 days into the future.");
+        return;
+    } else {
+        var arrayPosition = inputDay.diff(today, "day");
+        return arrayPosition;
+    }
+};
+
+//This function displays the map based on location input coordinates from the OpenWeather API geolocation fetch and displays the TomTom API interactive map on the page. If the user inputs a new location, the map updates accordingly. 
+function map(latitude, longitude) {
+    var API_KEY = "7ZuASDGIDYaSxAwpTaBAcI5E3Eqe7pq4";
+    var coordinates = [longitude, latitude];
+    var map = tt.map({
+        key: API_KEY,
+        center: coordinates,
+        zoom: 10,
+        container: 'mymap',
+    });
+
+    var handleResults = function (result) {
+        if (result.results) {
+            moveMap(result.results[0].position)
+        }
+    }
+    
+submitButton.addEventListener("click", search);
+
+    function search () {
+        tt.services.fuzzySearch({
+            key: API_KEY,
+            query: document.getElementById("query").value,
+            }).go().then(handleResults)
+    }
+}
+
+//This function accesses the TomTom API with the location input in longitude and latitude (previously sourced from the OpenWeather geolocation API call), and dynamically creates result cards of relevant POI nearby.
 function getNearbyResults(requestURL, latitude, longitude) {
 
+//the requestURL is a globally declared variable that is broken down into key value search parameters. This allows for further development and customization of narrower user-sourced search parameters to fetch more relevant data and improve user experience. 
     var tomLatitude = latitude;
     var tomLongitude = longitude;
-    //setting default to chicago for funcitonality testing
-    // if (latitude == "" && longitude == "" && countryCode == "") {
-    // tomLatitude = 41.8781136;
-    // tomLongitude = -87.6297982;
-    // countryCode = "US";
-    // alert for empty parameters
-    // alert("You must enter a city and country!");
-    // }
-
     var lat = "lat=" + tomLatitude;
     var lon = "&lon=" + tomLongitude;
     var categorySet = "&categoryset=" + categoryID;
 
     requestURL = baseURL + lat + lon + radius + limit + appid;
-    console.log(requestURL);
-
+//[Although there is not a dropdown Category section implemented yet, the functional code has accommodated space for one.]
     if (categoryID !== "") {
         requestURL + categorySet;
     }
 
     fetch(requestURL)
         .then(function (response) {
-            console.log(response);
-
-            if (response.status === 200) {
-                console.log("working");
-            } else {
-                console.log("try again loser");
-            }
             return response.json();
         })
         .then(function (data) {
-            console.log(data);
+ //After fetching the entire data object, specifically targets the 'results' from that object.
             let resultsList = data.results;
-            console.log(resultsList);
-            //logging entire data object, then isolating results
 
+//Utilizing for-loop to dynamically create a div container in the html for each result as well as the information to display
             for (let index = 0; index < resultsList.length; index++) {
                 let resultCard = document.createElement("div");
                 resultCard.setAttribute("class", "result-card");
+//For future usability and development, each dynamically created div container is given a unique id based on the index iteration in the fetched data.result object
                 resultCard.setAttribute("id", "result-info" + [index]);
                 
-                //going through result by index and retrieving relevant data and saving to object
+//going through result by index and retrieving relevant data and saving to an object
                 let result = {
                     Name: resultsList[index].poi.name,
                     Address: resultsList[index].address.freeformAddress,
@@ -343,24 +328,26 @@ function getNearbyResults(requestURL, latitude, longitude) {
                     Phone: resultsList[index].poi.phone,
                     Link: resultsList[index].poi.url,
                 };
-                //if no entry in fetch data, entry for result obj is deleted
+//if no entry in fetch data, entry for result object is deleted. this is to enhance UI and remove unnecessary entries with undefined data
                 if (result.Phone == undefined) {
                     delete result.Phone;
                 }
                 if (result.Link == undefined) {
                     delete result.Link;
                 }
-                console.log(result);
-                //preparing result obj to display entries as a readable text
+
+ //preparing result object to display entries as a readable text, then appending that text value to the created result card information and finally appending the p element text to the result container.
                 for (const [key, value] of Object.entries(result)) {
-                    console.log(`${key}: ${value}`);
                     let resultText = document.createElement("p");
                     resultText.textContent = `${key}: ${value}`;
                     
                     resultCard.appendChild(resultText);
                 }
-                console.log(resultCard.textContent);
                 resultsDiv.appendChild(resultCard);
             }
         })
 }
+
+//Event listeners
+//This is the event listener that references the handleSubmitButton function and begins the cascading function chain sequence for retrieving location coordinates, input date, saving to local storage, forecast, map location, and nearby POI results.
+submitButton.addEventListener("click", handleSubmitBtn);
