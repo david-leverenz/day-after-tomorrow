@@ -262,6 +262,7 @@ function determineArrayPosition() {
     }
 };
 
+//This function displays the map based on location input coordinates from the OpenWeather API geolocation fetch and displays the TomTom API interactive map on the page. If the user inputs a new location, the map updates accordingly. 
 function map(latitude, longitude) {
     var API_KEY = "7ZuASDGIDYaSxAwpTaBAcI5E3Eqe7pq4";
     var coordinates = [longitude, latitude];
@@ -287,18 +288,6 @@ submitButton.addEventListener("click", search);
             }).go().then(handleResults)
     }
 }
-
-
-
-
-submitButton.addEventListener("click", handleSubmitBtn);
-
-
-
-
-
-
-
 
 //This function accesses the TomTom API with the location input in longitude and latitude (previously sourced from the OpenWeather geolocation API call), and dynamically creates result cards of relevant POI nearby.
 function getNearbyResults(requestURL, latitude, longitude) {
@@ -358,3 +347,7 @@ function getNearbyResults(requestURL, latitude, longitude) {
             }
         })
 }
+
+//Event listeners
+//This is the event listener that references the handleSubmitButton function and begins the cascading function chain sequence for retrieving location coordinates, input date, saving to local storage, forecast, map location, and nearby POI results.
+submitButton.addEventListener("click", handleSubmitBtn);
