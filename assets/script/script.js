@@ -15,25 +15,22 @@ var inputDay;
 var inputDate;
 var parsedInputDay;
 var resultsDiv = document.getElementById("results-div");
+var submitButton = document.getElementById("submit-button");
+var displayDay = dayjs("6-14-2023").format("M-D-YYYY");
+var today = dayjs().format("M-D-YYYY");
 
 
 function map(latitude, longitude) {
-    console.log(latitude, longitude);
     var API_KEY = "7ZuASDGIDYaSxAwpTaBAcI5E3Eqe7pq4";
-    // var MADRID = [-3.703790, 40.416775];
-    // var LISBON = [-9.1319, 38.7222];
     var coordinates = [longitude, latitude];
-    console.log(coordinates);
     var map = tt.map({
         key: API_KEY,
-        //center: MADRID,
         center: coordinates,
         zoom: 10,
         container: 'mymap',
     });
 
     var handleResults = function (result) {
-        console.log(result);
         if (result.results) {
             moveMap(result.results[0].position)
         }
@@ -61,7 +58,6 @@ var getLatLonCity = function (city) {
 
         if (response.ok) {
             response.json().then(function (data) {
-                console.log(data);
 
                 for (var i = 0; i < data.length; i++) {
                     latitude = data[i].lat;
@@ -102,10 +98,7 @@ var loadLocalStorage = function (loadCity, loadDate) {
                 var cityDateParseArray = cityDateParse.split(" | ");
                 let cityParse = cityDateParseArray[0];
                 let dateParse = cityDateParseArray[1];
-                console.log("City: " + cityParse);
-                console.log("Date: " + dateParse);
                 inputDay=dayjs(dateParse)
-                console.log(inputDay);
                 getLatLonCity(cityParse);
             }
         }
@@ -132,7 +125,6 @@ function getInputCity() {
 
 function handleSubmitBtn (e){
     e.preventDefault();
-    console.log(getInputDate());
     var dateData = getInputDate();
     var cityNameData = getInputCity();
 
@@ -141,11 +133,10 @@ function handleSubmitBtn (e){
     loadLocalStorage(cityNameData, dateData);
 }
 
-var submitButton = document.getElementById("submit-button");
+
 submitButton.addEventListener("click", handleSubmitBtn);
 
-var displayDay = dayjs("6-14-2023").format("M-D-YYYY");
-var today = dayjs().format("M-D-YYYY");
+
 
 function determineArrayPosition() {
     if (inputDay.diff(today, "day") > 30) {

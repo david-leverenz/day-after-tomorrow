@@ -4,14 +4,47 @@ On Day After Tomorrow a person can enter any city and a date in the near future 
 ![image](https://github.com/david-leverenz/day-after-tomorrow/assets/131185593/d954949f-d682-4696-bb3c-f80501cc7994)
 
 ## Links
+Github Link: https://github.com/david-leverenz/day-after-tomorrow
+Live Link: https://david-leverenz.github.io/day-after-tomorrow/
 
+## User Story
+```
+AS A USER
+I WANT
+SO THAT
+```
+
+## Acceptance Criteria
+```
+GIVEN
+WHEN I open the webpage
+THEN is a search bar to input text, a place to input a desired date, and a search button.
+WHEN a city is searched for
+THEN I am presented with a map of the city, and relevant data around that location.
+WHEN a city and date is searched for
+THEN I am presented with a relevant weather forecast.
+WHEN viewing the forecast
+THEN the city name, temperature, and other weather related data is presented in a current and future forecast.
+WHEN I am viewing the map
+THEN I can interact with the map (click and drag, zoom, etc.)
+WHEN I am viewing the location POI results
+THEN the infomation contains the name, type of company, address, and phone/URL if applicable.
+WHEN I search for a new city
+THEN previously searched cities will be saved to local storage
+WHEN I want to look at my previous searched cities
+THEN I can see them on the page as buttons
+WHEN I click on a given button
+THEN it will take me to the result page with the respective location and date previously searched
+WHEN I reload the page
+THEN the previous search history data persists
+```
 
 ## Description
 Our website uses the Tailwind CSS framework (a framework other than Bootstrap).<br>
 It was deployed to GitHub Pages.<br>
 It is interactive (i.e. can accept and respond to user input).<br>
 It uses two different server-side APIs (four api calls).<br>
-It still has some alerts.  We weren't able to change them to modals due to time contraints.<br>
+It still has some alerts.  We weren't able to change them to modals due to paywall through the tailwindcss UI documentation on components.<br>
 It uses client-side storage to store persistent data.<br>
 It is responsive.<br>
 It has a semi-polished UI that time constraints prevented from being a polished UI.<br>
