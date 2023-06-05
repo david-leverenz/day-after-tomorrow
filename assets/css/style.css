@@ -98,7 +98,10 @@ input, select {
 }
 
 .card{
-    background-color: lightgoldenrodyellow;
+    /* background-color: lightgoldenrodyellow; */
+    background: rgba(250, 250, 210, .75);
+    /* opacity: .5; */
+    color: black;
     border-radius: 5%;
     border: 5px solid black;
     padding: 1rem;
@@ -115,7 +118,8 @@ input, select {
   
 
 .result-card{
-    background-color: lightgoldenrodyellow;
+    background: rgba(250, 250, 210, .75);
+    /* background-color: lightgoldenrodyellow; */
     align-items: baseline;
     width: 200px;
     padding: 1rem;

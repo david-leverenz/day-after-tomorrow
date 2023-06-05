@@ -161,10 +161,10 @@ var getForecast = function (latitude, longitude) {
             var rowDivEl = document.createElement("div");
 
             var foreList = document.createElement("div");
-            foreList.setAttribute("class", "col-12 m-3 col-xl");
+            foreList.setAttribute("class", "col-12 m-3 col-xl ml-4");
 
             var cardEl = document.createElement("div");
-            cardEl.setAttribute("class", "card p-3 m-3 my-2 fs-6");
+            cardEl.setAttribute("class", "card p-3 m-3 my-2 fs-6 bg-opacity-25");
 
             var titleEl = document.createElement("h4");
             titleEl.textContent = foreDay;
