@@ -41,60 +41,7 @@ var appid = "&key=lQzhlUqG4GkQgblg5j1RGpsNRkCl2PrN";
 var resultsDiv = document.getElementById("results-div");
 
 //Functions
-
-function map(latitude, longitude) {
-    var API_KEY = "7ZuASDGIDYaSxAwpTaBAcI5E3Eqe7pq4";
-    var coordinates = [longitude, latitude];
-    var map = tt.map({
-        key: API_KEY,
-        center: coordinates,
-        zoom: 10,
-        container: 'mymap',
-    });
-
-    var handleResults = function (result) {
-        if (result.results) {
-            moveMap(result.results[0].position)
-        }
-    }
-    
-submitButton.addEventListener("click", search);
-
-    function search () {
-        tt.services.fuzzySearch({
-            key: API_KEY,
-            query: document.getElementById("query").value,
-            }).go().then(handleResults)
-    }
-}
-
-
-// This function inserts the city into the apiURL then fetches the latitude and longitude of the city.  It checks the cities in the storage array and if the current searched city is not in the array, it adds it to the array.  If it's already in there it doesn't re-add the city to the array.  Then it runs the getWeather and getFiveDay functions.
-
-
-var getLatLonCity = function (city) {
-
-    var apiURL = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=44be570f60fd1ef1f012456a39e5a0ff";
-
-    fetch(apiURL).then(function (response) {
-
-        if (response.ok) {
-            response.json().then(function (data) {
-
-                for (var i = 0; i < data.length; i++) {
-                    latitude = data[i].lat;
-                    longitude = data[i].lon;
-                    cityName = data[i].name;
-
-                    getForecast(latitude, longitude);
-                    map(latitude, longitude);
-                    getNearbyResults(requestURL, latitude, longitude);
-                }
-            })
-        }
-    })
-};
-
+//Functions that are declared as variables to improve efficiency and organization of script code.
 // Puts values into local storage
 var loadLocalStorage = function (loadCity, loadDate) {
     var citiesInStorage = JSON.parse(localStorage.getItem("citySearch")) || []
@@ -129,46 +76,31 @@ var loadLocalStorage = function (loadCity, loadDate) {
     recallSearch();
 }
 
+// This function inserts the city into the apiURL then fetches the latitude and longitude of the city.  It checks the cities in the storage array and if the current searched city is not in the array, it adds it to the array.  If it's already in there it doesn't re-add the city to the array.  Then it runs the getWeather and getFiveDay functions.
+var getLatLonCity = function (city) {
 
-function getInputDate() {
-    inputDay = dayjs(inputDate.value);
-    parsedInputDay = dayjs(inputDay).format("MM-DD-YYYY");
+    var apiURL = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=44be570f60fd1ef1f012456a39e5a0ff";
 
-    return parsedInputDay;
-}
+    fetch(apiURL).then(function (response) {
 
+        if (response.ok) {
+            response.json().then(function (data) {
 
-function getInputCity() {
-    cityName = document.getElementById("location-search").value;
-    return cityName; 
-}
+                for (var i = 0; i < data.length; i++) {
+                    latitude = data[i].lat;
+                    longitude = data[i].lon;
+                    cityName = data[i].name;
 
-
-function handleSubmitBtn (e){
-    e.preventDefault();
-    var dateData = getInputDate();
-    var cityNameData = getInputCity();
-
-    getLatLonCity(cityNameData);
-
-    loadLocalStorage(cityNameData, dateData);
-}
-
-
-submitButton.addEventListener("click", handleSubmitBtn);
-
-
-
-function determineArrayPosition() {
-    if (inputDay.diff(today, "day") > 30) {
-        alert("We can't see that far into the future.  Please select a day no more than 30 days into the future.");
-        return;
-    } else {
-        var arrayPosition = inputDay.diff(today, "day");
-        return arrayPosition;
-    }
+                    getForecast(latitude, longitude);
+                    map(latitude, longitude);
+                    getNearbyResults(requestURL, latitude, longitude);
+                }
+            })
+        }
+    })
 };
 
+//This function retrieves relevant forecast data from the OpenWeather API with the coordinates fetched from the getLatLonCity function and the date from user input.  Once the specific forecast data is retrieved, it is appended to the relating HTML elements and their container to display onto the page.
 var getForecast = function (latitude, longitude) {
     var fiveDayURL = "https://api.openweathermap.org/data/2.5/forecast?lat=" + latitude + "&lon=" + longitude + "&appid=44be570f60fd1ef1f012456a39e5a0ff";
 
@@ -291,6 +223,80 @@ var getForecast = function (latitude, longitude) {
             forecast_Data.appendChild(rowDivEl);
         })
 }
+
+//Functions that can be called asynchronously
+//Functions for user input for location and date
+function getInputDate() {
+    inputDay = dayjs(inputDate.value);
+    parsedInputDay = dayjs(inputDay).format("MM-DD-YYYY");
+
+    return parsedInputDay;
+}
+
+
+function getInputCity() {
+    cityName = document.getElementById("location-search").value;
+    return cityName; 
+}
+
+//This function calls the previous functions to consolidate the user location and date input so it can be used in conjunction for saving to local storage and retrieving forecast data.
+function handleSubmitBtn (e){
+    e.preventDefault();
+    var dateData = getInputDate();
+    var cityNameData = getInputCity();
+
+    getLatLonCity(cityNameData);
+
+    loadLocalStorage(cityNameData, dateData);
+}
+
+//This function is used as a cap by determining the user input date against an array of dates 30 days from the current day and alerts if a user tries to input a date and retrieve data that is outside of the OpenWeather API's database.  (As well as science, since it is highly unlikely that accurrate forecast predictions can be made over 30 days into the future.)
+function determineArrayPosition() {
+    if (inputDay.diff(today, "day") > 30) {
+
+        alert("We can't see that far into the future.  Please select a day no more than 30 days into the future.");
+        return;
+    } else {
+        var arrayPosition = inputDay.diff(today, "day");
+        return arrayPosition;
+    }
+};
+
+function map(latitude, longitude) {
+    var API_KEY = "7ZuASDGIDYaSxAwpTaBAcI5E3Eqe7pq4";
+    var coordinates = [longitude, latitude];
+    var map = tt.map({
+        key: API_KEY,
+        center: coordinates,
+        zoom: 10,
+        container: 'mymap',
+    });
+
+    var handleResults = function (result) {
+        if (result.results) {
+            moveMap(result.results[0].position)
+        }
+    }
+    
+submitButton.addEventListener("click", search);
+
+    function search () {
+        tt.services.fuzzySearch({
+            key: API_KEY,
+            query: document.getElementById("query").value,
+            }).go().then(handleResults)
+    }
+}
+
+
+
+
+submitButton.addEventListener("click", handleSubmitBtn);
+
+
+
+
+
 
 
 
