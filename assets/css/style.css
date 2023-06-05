@@ -16,7 +16,7 @@ time, mark, audio, video {
     outline:0;
     font-size:100%;
     vertical-align:baseline;
-    background:lightgoldenrodyellow;
+    /* background:lightgoldenrodyellow; */
 }
 
 body {
@@ -52,14 +52,14 @@ a {
 
 /* change colours to suit your needs */
 ins {
-    background-color:lightgoldenrodyellow;
+    /* background-color:lightgoldenrodyellow; */
     color:#000;
     text-decoration:none;
 }
 
 /* change colours to suit your needs */
 mark {
-    background-color:lightgoldenrodyellow;
+    /* background-color:lightgoldenrodyellow; */
     color:#000;
     font-style:italic;
     font-weight:bold;
@@ -94,7 +94,7 @@ input, select {
 }
 
 * {
-    background-color: lightgoldenrodyellow;
+    /* background-color: lightgoldenrodyellow; */
 }
 
 .card{
