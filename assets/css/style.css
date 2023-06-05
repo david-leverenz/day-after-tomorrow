@@ -137,3 +137,37 @@ input, select {
     justify-items: center;
 } 
 
+@media screen and (max-width: 992px) {
+    .search-box {
+      display: inline-block;
+      width: 50%;
+    }
+  
+    .forecast-map {
+      display: inline-block;
+      width: 50%;
+    }
+
+    .activities {
+        display: inline-block;
+        width: 50%;
+      }
+  
+  }
+  
+  @media screen and (max-width: 768px) {
+    .search-box {
+      display: inline-block;
+      width: 50%;
+    }
+  
+    .forecast-map {
+      display: inline-block;
+      width: 50%;
+    }
+
+    .activities {
+        display: inline-block;
+        width: 50%;
+      }
+  }
