@@ -16,7 +16,7 @@ time, mark, audio, video {
     outline:0;
     font-size:100%;
     vertical-align:baseline;
-    background:transparent;
+    background:lightgoldenrodyellow;
 }
 
 body {
@@ -104,12 +104,12 @@ input, select {
     padding: 1rem;
 }
 
-.map {
+/* .map {
     border: 15px solid red;
     border-radius: 5%;
     
     
-}
+} */
 
 
   
