@@ -225,11 +225,21 @@ var getForecast = function (latitude, longitude) {
         })
 }
 
+function toggleModal(modalID){
+    document.getElementById(modalID).classList.toggle("hidden");
+    document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
+    document.getElementById(modalID).classList.toggle("flex");
+    document.getElementById(modalID + "-backdrop").classList.toggle("flex");
+  }
+
 //Functions that can be called asynchronously
 //Functions for user input for location and date
 function getInputDate() {
     inputDay = dayjs(inputDate.value);
     parsedInputDay = dayjs(inputDay).format("MM-DD-YYYY");
+
+    if (parsedInputDay==="") {
+        toggleModal("no-input");}
 
     return parsedInputDay;
 }
@@ -237,6 +247,10 @@ function getInputDate() {
 
 function getInputCity() {
     cityName = document.getElementById("location-search").value;
+
+    if (cityName==="") {
+        toggleModal("no-input");}
+   
     return cityName; 
 }
 
@@ -245,6 +259,9 @@ function handleSubmitBtn (e){
     e.preventDefault();
     var dateData = getInputDate();
     var cityNameData = getInputCity();
+
+    if (dateData==="") {
+        toggleModal("no-input");}
 
     getLatLonCity(cityNameData);
 
@@ -255,7 +272,7 @@ function handleSubmitBtn (e){
 function determineArrayPosition() {
     if (inputDay.diff(today, "day") > 30) {
 
-        alert("We can't see that far into the future.  Please select a day no more than 30 days into the future.");
+        toggleModal("no-input");
         return;
     } else {
         var arrayPosition = inputDay.diff(today, "day");
