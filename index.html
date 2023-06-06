@@ -17,11 +17,32 @@
 
 <body>
   <div class="w-full h-full bg-no-repeat bg-cover" style="background-image: url('./assets/images/airport.jpg');">
-
-
+ 
+    <div class="hidden w-full max-w-md overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center" id="no-input">
+      <div class="relative w-auto my-6 mx-auto max-w-3xl">
+         <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+          <div class="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+            <h3 class="text-3xl font-semibold">
+              I think you forgot something...
+            </h3>
+            <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" onclick="toggleModal('no-input')">
+              <span class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                ×
+              </span>
+            </button>
+          </div>
+          <div class="relative p-6 flex-auto">
+            <p class="my-4 text-slate-500 text-lg leading-relaxed">
+              You need to enter a date no more than 30 days in the future.  You also need to enter a correctly spelled city name.  Thank you!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-id-backdrop"></div>
+ 
     <h1 class="flex-center font-semibold p-5 text-4xl text-center text-white">Day After Tomorrow</h1>
     <div class="search-box flex flex-row  justify-center">
-      <!-- <div class="flex-auto"> -->
       <div class="relative max-w-sm flex-center">
         <div
           class="absolute p-1.5 items-center pt-0 pl-2 pointer-events-none bg-gray-50 border border-gray-300 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 flex">
@@ -36,7 +57,6 @@
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 pl-10 ml-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Select date">
       </div>
-      <!-- </div> -->
       <div>
         <input type="search" id="location-search"
           class="inline-block justify-center w-72 text-sm m-0 text-gray-900 bg-gray-50 rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
@@ -56,7 +76,6 @@
       traveling and the city you are visiting to see a forecast for that day, a map of the city and list of things to
       do while there. Your searches are saved below so that you can click on any previous "city | day" search - no need to re-enter the info.<br>Enjoy!
     </div>
-
     <div id="cities"></div>
     <div class="forecast-map flex flex-row p-3 justify-center">
       <div class="w-80">
@@ -71,11 +90,7 @@
     <div class="activities flex flex row text-black col-span-2 mymap p-10 m-10 justify-center" id="mymap">
       <div id="results-div"></div>
     </div>
-
-
-
   </div>
-
 
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
   <script src="./assets/script/script.js"></script>
