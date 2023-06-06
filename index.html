@@ -9,6 +9,9 @@
   <link rel="stylesheet" type="text/css" href="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.18.0/maps/maps.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
   <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.53.0/maps/maps-web.min.js"></script>
 </head>
 
@@ -16,25 +19,23 @@
   <div class="w-full h-full bg-no-repeat bg-cover" style="background-image: url('./assets/images/airport.jpg');">
 
 
-    <h1 class="flex-center font-semibold p-5 text-4xl text-center">DAY AFTER TOMORROW</h1>
-    <!-- <div class="flex flex-1 justify-end"></div> -->
-    <!-- <form type="submit" id="search-form" class="p-3 m-3 container  grid grid-cols-2 align-middle flex-auto"> -->
-    <div class="search-box flex flex-row p-3 justify-center">
+    <h1 class="flex-center font-semibold p-5 text-4xl text-center text-white">Day After Tomorrow</h1>
+    <div class="search-box flex flex-row  justify-center">
       <!-- <div class="flex-auto"> -->
-        <div class="relative max-w-sm flex-center">
-          <div
-            class="absolute p-1.5 items-center pt-0 pl-2 pointer-events-none bg-gray-50 border border-gray-300 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 flex">
-            <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400 " fill="currentColor"
-              viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd"
-                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                clip-rule="evenodd"></path>
-            </svg>
-          </div>
-          <input datepicker datepicker-format="mm/dd/yyyy" id="date-input" type="date"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 pl-10 ml-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Select date">
+      <div class="relative max-w-sm flex-center">
+        <div
+          class="absolute p-1.5 items-center pt-0 pl-2 pointer-events-none bg-gray-50 border border-gray-300 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 flex">
+          <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400 " fill="currentColor"
+            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
+              d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+              clip-rule="evenodd"></path>
+          </svg>
         </div>
+        <input datepicker datepicker-format="mm/dd/yyyy" id="date-input" type="date"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 pl-10 ml-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Select date">
+      </div>
       <!-- </div> -->
       <div>
         <input type="search" id="location-search"
@@ -48,16 +49,14 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
           </svg>
-          <!-- <span class="sr-only">Search</span> -->
         </button>
       </div>
     </div>
-    <!-- </form> -->
-
+    <div class="instructions text-lg  font-semibold p-5  text-center text-black pl-20 pr-20">Select the date you're travelling and the city you are visiting to see a forecast for that day, a map of the city and list of things to do while there. Enjoy!
+    </div>
 
     <div id="cities"></div>
-    <!-- <div class="grid grid-cols-[10%_90%] gap-4"> -->
-    <div class="forecast-map flex flex-row p-3 justify-center">  
+    <div class="forecast-map flex flex-row p-3 justify-center">
       <div class="w-80">
         <div id="forecast-data" class="w-80 m-3"></div>
       </div>
@@ -66,14 +65,14 @@
           <div style="width:60vw; height: 49vh;" id="mymap"></div>
         </div>
       </div>
-    </div>  
+    </div>
     <div class="activities flex flex row text-black col-span-2 mymap p-10 m-10 justify-center" id="mymap">
-        <div id="results-div"></div>
+      <div id="results-div"></div>
     </div>
 
-    
 
 
+  </div>  
 
 
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
