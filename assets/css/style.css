@@ -187,15 +187,11 @@ select {
     padding: 1rem;
 }
 
-/* .map {
-    border: 15px solid red;
-    border-radius: 5%;
-    
-    
-} */
-
-
-
+.modal-pop {
+    /* width: 100%; */
+    margin-left: 443px;
+    margin-top: 346px;    
+}
 
 .result-card {
     background: rgba(250, 250, 210, .75);

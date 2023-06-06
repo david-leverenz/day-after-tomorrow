@@ -238,8 +238,8 @@ function getInputDate() {
     inputDay = dayjs(inputDate.value);
     parsedInputDay = dayjs(inputDay).format("MM-DD-YYYY");
 
-    if (parsedInputDay==="") {
-        toggleModal("no-input");}
+    // if (parsedInputDay==="") {
+    //     toggleModal("no-input");}
 
     return parsedInputDay;
 }
@@ -260,8 +260,8 @@ function handleSubmitBtn (e){
     var dateData = getInputDate();
     var cityNameData = getInputCity();
 
-    if (dateData==="") {
-        toggleModal("no-input");}
+    // if (dateData==="") {
+    //     toggleModal("no-input");}
 
     getLatLonCity(cityNameData);
 
@@ -272,7 +272,7 @@ function handleSubmitBtn (e){
 function determineArrayPosition() {
     if (inputDay.diff(today, "day") > 30) {
 
-        toggleModal("no-input");
+        // toggleModal("no-input");
         return;
     } else {
         var arrayPosition = inputDay.diff(today, "day");
