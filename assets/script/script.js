@@ -48,31 +48,31 @@ var loadLocalStorage = function (loadCity, loadDate) {
     citiesInStorage.push({ searchedName: loadCity, searchedDate: loadDate });
     localStorage.setItem("citySearch", JSON.stringify(citiesInStorage));
     var cityArray = JSON.parse(localStorage.getItem("citySearch"));
-    
+
     var recallSearch = function () {
-        forecast_Data.innerHTML="";
-        document.getElementById("cities").innerHTML=""
+        forecast_Data.innerHTML = "";
+        document.getElementById("cities").innerHTML = ""
         for (let i = 0; i < citiesInStorage.length; i++) {
             var cityDateButton = document.createElement("button");
-    
+
             var counter = cityArray[i];
             // document.getElementById("cities").innerHTML=""
             cityDateButton.textContent = counter.searchedName + " | " + counter.searchedDate;
             document.getElementById("cities").appendChild(cityDateButton);
             cityDateButton.setAttribute("class", "bg-transparent hover:bg-blue-500 text-black-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded text-base");
-    
+
             cityDateButton.addEventListener("click", buttonClickHandler)
             var buttonClickHandler = function (event) {
-                forecast_Data.innerHTML="";
+                forecast_Data.innerHTML = "";
                 var cityDateParse = (event.target.textContent)
                 var cityDateParseArray = cityDateParse.split(" | ");
                 let cityParse = cityDateParseArray[0];
                 let dateParse = cityDateParseArray[1];
-                inputDay=dayjs(dateParse)
+                inputDay = dayjs(dateParse)
                 getLatLonCity(cityParse);
             }
         }
-   
+
     }
     recallSearch();
 }
@@ -107,7 +107,8 @@ var getForecast = function (latitude, longitude) {
 
 
     fetch(fiveDayURL).then(function (response) {
-        return response.json()})
+        return response.json()
+    })
         .then(function (forecastData) {
 
             var dayChosen = determineArrayPosition();
@@ -225,12 +226,12 @@ var getForecast = function (latitude, longitude) {
         })
 }
 
-function toggleModal(modalID){
+function toggleModal(modalID) {
     document.getElementById(modalID).classList.toggle("hidden");
-    document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
+    // document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
     document.getElementById(modalID).classList.toggle("flex");
-    document.getElementById(modalID + "-backdrop").classList.toggle("flex");
-  }
+    // document.getElementById(modalID + "-backdrop").classList.toggle("flex");
+}
 
 //Functions that can be called asynchronously
 //Functions for user input for location and date
@@ -248,21 +249,29 @@ function getInputDate() {
 function getInputCity() {
     cityName = document.getElementById("location-search").value;
 
-    if (cityName==="") {
-        toggleModal("no-input");}
-   
-    return cityName; 
+    if (cityName === "") {
+        toggleModal("no-input");
+        return;
+    }
+
+    return cityName;
 }
 
 //This function calls the previous functions to consolidate the user location and date input so it can be used in conjunction for saving to local storage and retrieving forecast data.
-function handleSubmitBtn (e){
+function handleSubmitBtn(e) {
     e.preventDefault();
     var dateData = getInputDate();
     var cityNameData = getInputCity();
 
-    // if (dateData==="") {
-    //     toggleModal("no-input");}
+    if (dateData === "Invalid Date") {
+        toggleModal("no-input");
+        return;
+    }
 
+    if ((dayjs(dateData).diff(today, "day")) > 30) {
+        toggleModal("no-input");
+        return;
+    }
     getLatLonCity(cityNameData);
 
     loadLocalStorage(cityNameData, dateData);
@@ -271,8 +280,6 @@ function handleSubmitBtn (e){
 //This function is used as a cap by determining the user input date against an array of dates 30 days from the current day and alerts if a user tries to input a date and retrieve data that is outside of the OpenWeather API's database.  (As well as science, since it is highly unlikely that accurrate forecast predictions can be made over 30 days into the future.)
 function determineArrayPosition() {
     if (inputDay.diff(today, "day") > 30) {
-
-        // toggleModal("no-input");
         return;
     } else {
         var arrayPosition = inputDay.diff(today, "day");
@@ -296,21 +303,21 @@ function map(latitude, longitude) {
             moveMap(result.results[0].position)
         }
     }
-    
-submitButton.addEventListener("click", search);
 
-    function search () {
+    submitButton.addEventListener("click", search);
+
+    function search() {
         tt.services.fuzzySearch({
             key: API_KEY,
             query: document.getElementById("query").value,
-            }).go().then(handleResults)
+        }).go().then(handleResults)
     }
 }
 
 //This function accesses the TomTom API with the location input in longitude and latitude (previously sourced from the OpenWeather geolocation API call), and dynamically creates result cards of relevant POI nearby.
 function getNearbyResults(requestURL, latitude, longitude) {
 
-//the requestURL is a globally declared variable that is broken down into key value search parameters. This allows for further development and customization of narrower user-sourced search parameters to fetch more relevant data and improve user experience. 
+    //the requestURL is a globally declared variable that is broken down into key value search parameters. This allows for further development and customization of narrower user-sourced search parameters to fetch more relevant data and improve user experience. 
     var tomLatitude = latitude;
     var tomLongitude = longitude;
     var lat = "lat=" + tomLatitude;
@@ -318,7 +325,7 @@ function getNearbyResults(requestURL, latitude, longitude) {
     var categorySet = "&categoryset=" + categoryID;
 
     requestURL = baseURL + lat + lon + radius + limit + appid;
-//[Although there is not a dropdown Category section implemented yet, the functional code has accommodated space for one.]
+    //[Although there is not a dropdown Category section implemented yet, the functional code has accommodated space for one.]
     if (categoryID !== "") {
         requestURL + categorySet;
     }
@@ -328,17 +335,17 @@ function getNearbyResults(requestURL, latitude, longitude) {
             return response.json();
         })
         .then(function (data) {
- //After fetching the entire data object, specifically targets the 'results' from that object.
+            //After fetching the entire data object, specifically targets the 'results' from that object.
             let resultsList = data.results;
 
-//Utilizing for-loop to dynamically create a div container in the html for each result as well as the information to display
+            //Utilizing for-loop to dynamically create a div container in the html for each result as well as the information to display
             for (let index = 0; index < resultsList.length; index++) {
                 let resultCard = document.createElement("div");
                 resultCard.setAttribute("class", "result-card");
-//For future usability and development, each dynamically created div container is given a unique id based on the index iteration in the fetched data.result object
+                //For future usability and development, each dynamically created div container is given a unique id based on the index iteration in the fetched data.result object
                 resultCard.setAttribute("id", "result-info" + [index]);
-                
-//going through result by index and retrieving relevant data and saving to an object
+
+                //going through result by index and retrieving relevant data and saving to an object
                 let result = {
                     Name: resultsList[index].poi.name,
                     Address: resultsList[index].address.freeformAddress,
@@ -346,7 +353,7 @@ function getNearbyResults(requestURL, latitude, longitude) {
                     Phone: resultsList[index].poi.phone,
                     Link: resultsList[index].poi.url,
                 };
-//if no entry in fetch data, entry for result object is deleted. this is to enhance UI and remove unnecessary entries with undefined data
+                //if no entry in fetch data, entry for result object is deleted. this is to enhance UI and remove unnecessary entries with undefined data
                 if (result.Phone == undefined) {
                     delete result.Phone;
                 }
@@ -354,11 +361,11 @@ function getNearbyResults(requestURL, latitude, longitude) {
                     delete result.Link;
                 }
 
- //preparing result object to display entries as a readable text, then appending that text value to the created result card information and finally appending the p element text to the result container.
+                //preparing result object to display entries as a readable text, then appending that text value to the created result card information and finally appending the p element text to the result container.
                 for (const [key, value] of Object.entries(result)) {
                     let resultText = document.createElement("p");
                     resultText.textContent = `${key}: ${value}`;
-                    
+
                     resultCard.appendChild(resultText);
                 }
                 resultsDiv.appendChild(resultCard);
