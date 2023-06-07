@@ -56,10 +56,10 @@ Our website uses the Tailwind CSS framework (a framework other than Bootstrap).<
 It was deployed to GitHub Pages.<br>
 It is interactive (i.e. can accept and respond to user input).<br>
 It uses two different server-side APIs (four api calls).<br>
-It still has some alerts.  We weren't able to change them to modals due to paywall through the tailwindcss UI documentation on components.<br>
+It uses modals for validation.<br>
 It uses client-side storage to store persistent data.<br>
 It is responsive.<br>
-It has a semi-polished UI that time constraints prevented from being a polished UI.<br>
+It has a polished and easy-to-use UI.<br>
 It has a clean repository that meets quality coding standards (file structure, naming conventions, follows best practices for class/id naming conventions, indentation, quality comments, etc.).<br>
 It has a quality README (with unique name, description, technologies used, screenshot (to be added after CSS changes), and link to deployed application).<br>
 
