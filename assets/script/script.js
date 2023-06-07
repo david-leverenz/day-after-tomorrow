@@ -56,26 +56,25 @@ var loadLocalStorage = function (loadCity, loadDate) {
             var cityDateButton = document.createElement("button");
 
             var counter = cityArray[i];
-            // document.getElementById("cities").innerHTML=""
+
             cityDateButton.textContent = counter.searchedName + " | " + counter.searchedDate;
             document.getElementById("cities").appendChild(cityDateButton);
             cityDateButton.setAttribute("class", "bg-transparent hover:bg-blue-500 text-black-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded text-base");
-
-            cityDateButton.addEventListener("click", buttonClickHandler)
-            var buttonClickHandler = function (event) {
-                forecast_Data.innerHTML = "";
-                var cityDateParse = (event.target.textContent)
-                var cityDateParseArray = cityDateParse.split(" | ");
-                let cityParse = cityDateParseArray[0];
-                let dateParse = cityDateParseArray[1];
-                inputDay = dayjs(dateParse)
-                getLatLonCity(cityParse);
-            }
         }
-
     }
     recallSearch();
 }
+
+var buttonClickHandler = function (event) {
+    forecast_Data.innerHTML = "";
+    var cityDateParse = (event.target.textContent)
+    var cityDateParseArray = cityDateParse.split(" | ");
+    let cityParse = cityDateParseArray[0];
+    let dateParse = cityDateParseArray[1];
+    inputDay = dayjs(dateParse)
+    getLatLonCity(cityParse);
+}
+document.getElementById("cities").addEventListener("click", buttonClickHandler);
 
 // This function inserts the city into the apiURL then fetches the latitude and longitude of the city.  It checks the cities in the storage array and if the current searched city is not in the array, it adds it to the array.  If it's already in there it doesn't re-add the city to the array.  Then it runs the getWeather and getFiveDay functions.
 var getLatLonCity = function (city) {
@@ -227,10 +226,15 @@ var getForecast = function (latitude, longitude) {
 }
 
 function toggleModal(modalID) {
+    
+    let backdropModalId = modalID+"-backdrop"
+    
     document.getElementById(modalID).classList.toggle("hidden");
     // document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
+    // document.getElementById(backdropModalId).classList.toggle("hidden");
     document.getElementById(modalID).classList.toggle("flex");
     // document.getElementById(modalID + "-backdrop").classList.toggle("flex");
+    // document.getElementById(backdropModalId).classList.toggle("flex");
 }
 
 //Functions that can be called asynchronously
@@ -249,10 +253,10 @@ function getInputDate() {
 function getInputCity() {
     cityName = document.getElementById("location-search").value;
 
-    if (cityName === "") {
-        toggleModal("no-input");
-        return;
-    }
+    // if ((cityName === "")||(typeof cityNameData ==="undefined")) {
+    //     toggleModal("no-input");
+    //     return;
+    // }
 
     return cityName;
 }
@@ -272,8 +276,14 @@ function handleSubmitBtn(e) {
         toggleModal("no-input");
         return;
     }
-    getLatLonCity(cityNameData);
 
+
+    if ((cityName === "")||(typeof cityNameData ==="undefined")) {
+
+        toggleModal("no-input");
+        return;
+    }
+    getLatLonCity(cityNameData);
     loadLocalStorage(cityNameData, dateData);
 }
 
