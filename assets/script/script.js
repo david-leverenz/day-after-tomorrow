@@ -347,7 +347,9 @@ function getNearbyResults(requestURL, latitude, longitude) {
         .then(function (data) {
             //After fetching the entire data object, specifically targets the 'results' from that object.
             let resultsList = data.results;
-
+            
+            resultsDiv.innerHTML="";
+            
             //Utilizing for-loop to dynamically create a div container in the html for each result as well as the information to display
             for (let index = 0; index < resultsList.length; index++) {
                 let resultCard = document.createElement("div");
@@ -378,6 +380,7 @@ function getNearbyResults(requestURL, latitude, longitude) {
 
                     resultCard.appendChild(resultText);
                 }
+ 
                 resultsDiv.appendChild(resultCard);
             }
         })
